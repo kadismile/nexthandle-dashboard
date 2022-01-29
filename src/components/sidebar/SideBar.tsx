@@ -1,7 +1,16 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
+  const location: any = useLocation();
+
+  const getActiveLink = (pathname: any) => {
+    const path = location.pathname;
+    if (pathname.includes(path)) {
+      return 'active'
+    }
+  };
+
   return (
     <div className="sidebar px-4 py-4 py-md-4 me-0">
       <div className="d-flex flex-column h-100">
@@ -12,35 +21,33 @@ const SideBar = () => {
           <span className="logo-text">NextHandle</span>
         </a>
         <ul className="menu-list flex-grow-1 mt-3">
-          <li><a className="m-link active" href="/"><i className="icofont-home fs-5"/>
+          <li><a className={`m-link ${getActiveLink(['/'])}`} href="/"><i className="icofont-home fs-5"/>
             <span>Dashboard</span></a></li>
-          <li className="collapsed">
-            <a className="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
+          <li className="collapsed ">
+            <a className={`m-link ${getActiveLink(['/products', '/product-brand', '/product-variant'])}`} data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
               <i className="icofont-notepad fs-5"/> <span>Products</span> <span
               className="arrow icofont-rounded-down ms-auto text-end fs-5"/></a>
             <ul className="sub-menu collapse" id="menu-order">
               <li>
-                <a className="ms-link">
-                  <Link to='/products'> <span style={{color: 'white'}}> Product Lists </span> </Link>
-                </a>
+                <Link to='/products' className={`ms-link ${getActiveLink(['/products'])}`}>
+                  Product Lists
+                </Link>
               </li>
               <li>
-                <a className="ms-link">
-                  <Link to='/product-brand'> <span style={{color: 'white'}}> Product Brand </span> </Link>
-                </a>
+                  <Link to='/product-brand' className={`ms-link ${getActiveLink(['/product-brand'])}`}>
+                      Product Brand
+                  </Link>
               </li>
               <li>
-                <a className="ms-link">
-                  <Link to='/product-variant'> <span style={{color: 'white'}}> Product Variants </span> </Link>
-                </a>
+                  <Link to='/product-variant' className={`ms-link ${getActiveLink(['/product-variant'])}`}> Product Variants </Link>
               </li>
             </ul>
           </li>
-
           <li>
-            <a className="m-link"><i className="icofont-truck-loaded fs-5"/>
-              <Link to='/categories'> <span style={{color: 'white'}}> Categories </span> </Link>
-            </a>
+            <Link to='/categories' className={`m-link ${getActiveLink('/categories')}`}>
+              <i className="icofont-truck-loaded fs-5"/>
+              Categories
+            </Link>
           </li>
           <li className="collapsed">
             <a className="m-link" data-bs-toggle="collapse" data-bs-target="#order" href="#">
@@ -57,7 +64,6 @@ const SideBar = () => {
               <Link to='/vendors'> <span style={{color: 'white'}}> Vendor </span> </Link>
             </a>
           </li>
-
           <li className="collapsed">
             <a className="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
               <i className="icofont-sale-discount fs-5"/> <span>Sales Promotion</span> <span
