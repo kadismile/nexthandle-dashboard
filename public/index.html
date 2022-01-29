@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Next Handle Admin </title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+
+    <link href="/assets/css/dropify.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/notifier.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <!-- Plugin Js -->
+    <script src="/assets/bundles/apexcharts.bundle.js"></script>
+    <script src="/assets/bundles/dataTables.bundle.js"></script>
+    <script src="/assets/bundles/notifier.js"></script>
+   <!-- <script src="/assets/bundles/dropify.min.js"></script>-->
+    <script src =https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js></script>
+
+    <!-- Jquery Page Js -->
+    <!--<script src="http://pixelwibes.com/template/ebazar/html/js/template.js"></script>
+    <script src="http://pixelwibes.com/template/ebazar/html/js/page/index.js"></script>-->
+    <script>
+      $('#myDataTable')
+              .addClass( 'nowrap')
+              .dataTable( {
+                responsive: true,
+                columnDefs: [
+                  { targets: [-1, -3], className: 'dt-body-right' }
+                ]
+              });
+
+      $(document).ready(function(){
+
+        $('.dropify').dropify();
+      });
+    </script>
+
   </body>
 </html>
