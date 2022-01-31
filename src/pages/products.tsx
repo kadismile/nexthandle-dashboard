@@ -41,7 +41,7 @@ const Product = () => {
 
   const handleChange = async (event: { preventDefault: () => void; target: { name: any; value: any; id: any }; }) => {
     event.preventDefault();
-    let { id } = event.target;
+    const { id } = event.target;
     const product = products.find( (p: any) => p._id === id);
     product.productId = id;
     product.isActive = !product.isActive;

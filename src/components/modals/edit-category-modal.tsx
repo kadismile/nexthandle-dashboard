@@ -3,7 +3,7 @@ import toastr from 'toastr';
 import CategoryService from '../../services/category'
 import {useDispatch} from "react-redux";
 import {DisabledButton} from "../libs";
-import {setCategories} from "../../redux/categorySlice";
+import {updateCategories} from "../../redux/categorySlice";
 
 const EditCategoryModal = (props: any) => {
   let { category }: any = props;
@@ -79,14 +79,14 @@ const EditCategoryModal = (props: any) => {
   const  handleSubmit =  async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     const { name } = formValues;
-    const data = {
+    const catData = {
       categoryId: category._id,
       name
     };
-    let response = await CategoryService.updateCategory(data);
-    let { status }: any = response;
+    let response: any = await CategoryService.updateCategory(catData);
+    let { status, data }: any = response;
     if (status === "success") {
-      dispatch(setCategories(category._id + new Date().getMilliseconds()));
+      dispatch(updateCategories(data));
       toastr.success('category saved successfully');
     } else {
       toastr.error('category updated successfully');

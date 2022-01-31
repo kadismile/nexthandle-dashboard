@@ -1,5 +1,5 @@
 import {client} from '../../utils/api-client'
-interface IUser {
+interface IVendor {
   token?: string,
   name?: string,
   email?: string,
@@ -9,7 +9,7 @@ interface IUser {
 class VendorService {
   public serverUrl = process.env.REACT_APP_BACKEND_URL ;
 
-  async getVendors(params: string): Promise<IUser> {
+  async getVendors(params: string): Promise<IVendor> {
     try {
       return await client(
         `${this.serverUrl}/vendors?${params}`,
@@ -20,7 +20,7 @@ class VendorService {
     }
   }
 
-  async searchVendors(searchTerm: any): Promise<IUser> {
+  async searchVendors(searchTerm: any): Promise<IVendor> {
     try {
       let search = {
         searchTerm,
@@ -38,11 +38,11 @@ class VendorService {
     }
   }
 
-  async deleteVendor(vendorId: string): Promise<IUser> {
+  async updateVendor(data: any): Promise<IVendor> {
     try {
       return await client(
-        `${this.serverUrl}/vendors`,
-        {data: {vendorId}, type: null, headers: {}}
+        `${this.serverUrl}/vendor/update`,
+        {data: { ...data }, type: null, headers: {}}
       );
     } catch (e) {
       throw e
