@@ -15,7 +15,8 @@ const ProductVariantModal = () => {
 
   const downloadSampleCsv = async () => {
     let data = [{
-      name: "Samsung S21"
+      name: "Samsung A20",
+      categoryId: "xe5pkAuvmtXYE5zXmQ6cqYMsi",
     }];
     const options = {
       fieldSeparator: ",",
@@ -57,13 +58,14 @@ const ProductVariantModal = () => {
     });
     let formData = new FormData();
     formData.append('myImage', file[0]);
-    let data: any = await ProductService.uploadProductCsv(formData);
+    console.log("file -----> ", file);
+    let data: any = await ProductService.uploadVariantCsv(formData);
     const { status, error } = data;
     if (error) {
       toastr.error('Error uploading csv file')
     }
     if (status === 'success') {
-      toastr.success("categories uploaded successfully")
+      toastr.success("variants uploaded successfully")
       dispatch(setCategories(true));
     }
   };

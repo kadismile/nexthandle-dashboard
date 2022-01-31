@@ -40,13 +40,13 @@ const ProductVariant = () => {
       }, 1200)
     })()
   },[storeVariants]);
-  const deleteBrand = async (brandId: any) => {
+  const deleteProductVariant = async (variantId: any) => {
     let onOk = async() => {
-      let brand = await ProductServices.getVariants(brandId);
+      let brand = await ProductServices.deleteVariant(variantId);
       const { status }: any = brand;
       if (status === 'success') {
         setLoading(true);
-        toastr.success('product brand deleted successfully');
+        toastr.success('product varaint deleted successfully');
         await fetchVariants()
       }
     };
@@ -133,7 +133,7 @@ const ProductVariant = () => {
                                     <td>
                                       <div className="btn-group" role="group" aria-label="Basic outlined example">
                                         <button type="button" className="btn btn-outline-secondary" onClick={ () => setSelectedVariant(variant)} data-bs-toggle="modal" data-bs-target="#edit-brand"><i className="icofont-edit text-success" /></button>
-                                        <button type="button" onClick={ () => deleteBrand(variant._id)} className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger" /></button>
+                                        <button type="button" onClick={ () => deleteProductVariant(variant._id)} className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger" /></button>
                                       </div>
                                     </td>
                                   </tr>)

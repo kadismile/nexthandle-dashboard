@@ -2,7 +2,7 @@ import React from "react";
 import {Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
-  const location: any = useLocation();
+  const location = useLocation();
 
   const getActiveLink = (pathname: any) => {
     const path = location.pathname;
@@ -21,8 +21,10 @@ const SideBar = () => {
           <span className="logo-text">NextHandle</span>
         </a>
         <ul className="menu-list flex-grow-1 mt-3">
-          <li><a className={`m-link ${getActiveLink(['/'])}`} href="/"><i className="icofont-home fs-5"/>
-            <span>Dashboard</span></a></li>
+          <li><a className={`m-link ${getActiveLink(['/'])}`} href="/">
+            <i className="icofont-home fs-5"/>
+            <span>Dashboard</span></a>
+          </li>
           <li className="collapsed ">
             <a className={`m-link ${getActiveLink(['/products', '/product-brand', '/product-variant'])}`} data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
               <i className="icofont-notepad fs-5"/> <span>Products</span> <span
@@ -44,9 +46,15 @@ const SideBar = () => {
             </ul>
           </li>
           <li>
-            <Link to='/categories' className={`m-link ${getActiveLink('/categories')}`}>
+            <Link to='/categories' className={`m-link ${getActiveLink(['/categories'])}`}>
               <i className="icofont-truck-loaded fs-5"/>
               Categories
+            </Link>
+          </li>
+          <li>
+            <Link to='/vendors' className={`m-link ${getActiveLink(['/vendors'])}`}>
+              <i className="icofont-funky-man fs-5"/>
+              Vendor
             </Link>
           </li>
           <li className="collapsed">
@@ -58,11 +66,6 @@ const SideBar = () => {
               <li><a className="ms-link" href="order-details.html">Order Details</a></li>
               <li><a className="ms-link" href="order-invoices.html">Order Invoices</a></li>
             </ul>
-          </li>
-          <li>
-            <a className="m-link"><i className="icofont-funky-man fs-5"/>
-              <Link to='/vendors'> <span style={{color: 'white'}}> Vendor </span> </Link>
-            </a>
           </li>
           <li className="collapsed">
             <a className="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
