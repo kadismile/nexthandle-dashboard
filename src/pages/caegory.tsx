@@ -2,24 +2,25 @@ import React, {useEffect, useState} from "react";
 import moment from 'moment'
 import {useSelector} from "react-redux";
 import {selectCategory} from "../redux/categorySlice";
-import ProductServices from "../services/product";
+import CategoryServices from "../services/category";
 import {PageSpinner} from "../components/libs";
 import CategoryModal from "../components/modals/add-category-modal";
 import toastr from 'toastr'
 import AWN from "awesome-notifications"
 import EditCategoryModal from "../components/modals/edit-category-modal";
+import ActiveFilter from "../components/category/category-filter";
 
 const Category = () => {
   const storedCategories = useSelector(selectCategory);
   const [categories, setCategories] = useState(storedCategories);
   const [loading, setLoading] = useState(true);
   const [selectedCat, setSelectedCat] = useState(undefined);
-  let index = 0;
   let notifier = new AWN();
 
   const fetchCategories = async () => {
     setLoading(true);
-    let categories: any = await ProductServices.getCategories();
+    let params = `isActive=true`
+    let categories: any = await CategoryServices.getCategories(params);
     const {data: {data}} = categories;
     if (data) {
       setCategories(data);
@@ -31,24 +32,29 @@ const Category = () => {
       await fetchCategories()
     })()
   },[]);
+
   useEffect(()=> {
     ( async ()=> {
       setLoading(true);
-      await fetchCategories();
+      setCategories(storedCategories);
       setTimeout(()=> {
         setLoading(false);
       }, 1200)
     })()
   },[storedCategories]);
-  const deleteCategory = async (categoryId: any) => {
+
+  const handleChange = async (event: { preventDefault: () => void; target: { name: any; value: any; id: any }; }) => {
+    const { id } = event.target;
+    const category = categories.find( (c: any) => c._id === id);
     let onOk = async() => {
-      let category = await ProductServices.deleteCategory(categoryId);
-      const { status }: any = category;
-      if (status === 'success') {
-        setLoading(true);
-        toastr.success('category deleted successfully');
-        await fetchCategories()
-      }
+      event.preventDefault();
+      setLoading(true);
+      const doc = {
+        categoryId: category._id,
+        isActive: !category.isActive,
+      };
+      await CategoryServices.updateCategory(doc);
+      await fetchCategories()
     };
     let onCancel = () => {return};
     notifier.confirm(
@@ -57,7 +63,7 @@ const Category = () => {
       onCancel,
       {
         labels: {
-          confirm: 'Delete Category?'
+          confirm: `Update Category to ${category.isActive ? 'InActive ?' : 'Active ?'}`
         }
       }
     )
@@ -85,9 +91,10 @@ const Category = () => {
                 </div>
               </div>
             </div>
-          </div> {/* Row end  */}
+          </div>
           <div className="row g-3 mb-3">
-            <div className="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+            <ActiveFilter />
+            <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
               {
                 loading ?
                   <PageSpinner />
@@ -105,13 +112,14 @@ const Category = () => {
                                 <th>Name</th>
                                 <th>Created</th>
                                 <th>Actions</th>
+                                <th> </th>
                               </tr>
                               </thead>
                               <tbody>
-                              {categories.map((cat: any) => {
+                              {categories.map((cat: any, index: number) => {
                                 return (
-                                  <tr key={cat._id}>
-                                    <td><strong>#{index +=1}</strong></td>
+                                  <tr key={cat._id} style={{ backgroundColor: !cat.isActive ? '#f5eacb' :''}}>
+                                    <td><strong>#{index+1}</strong></td>
                                     <td>
                                       <a href="#"
                                          data-bs-toggle="tooltip" data-bs-placement="top" title="copy to clipboard"
@@ -131,10 +139,18 @@ const Category = () => {
                                       {moment(cat.createdAt).format('do MMM, YYYY')}
                                     </td>
                                     <td>
-                                      <div className="btn-group" role="group" aria-label="Basic outlined example">
-                                        <button type="button" className="btn btn-outline-secondary" onClick={ () => setSelectedCat(cat)} data-bs-toggle="modal" data-bs-target="#edit-category"><i className="icofont-edit text-success" /></button>
-                                        <button type="button" onClick={ () => deleteCategory(cat._id)} className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger" /></button>
+                                      <div className="form-check form-switch position-absolute">
+                                        <input className="form-check-input" type="checkbox" id={cat._id} onChange={handleChange} checked={cat.isActive} />
+                                        <label className="form-check-label" htmlFor="Eaten-switch1">  </label>
                                       </div>
+                                    </td>
+                                    <td>
+                                      <button type="button" className="btn btn-outline-secondary"
+                                              style={{marginTop: '18px'}}
+                                              onClick={ () => setSelectedCat(cat)}
+                                              data-bs-toggle="modal" data-bs-target="#edit-category">
+                                        <i className="icofont-edit text-success" />
+                                      </button>
                                     </td>
                                   </tr>)
                               })}

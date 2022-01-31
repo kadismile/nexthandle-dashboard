@@ -11,7 +11,6 @@ const Vendor = () => {
   const storedVendors = useSelector(selectVendor);
   const [vendor, setVendor] = useState(storedVendors);
   const [loading, setLoading] = useState(true);
-  let index = 0;
 
   const getVendors = async () => {
     setLoading(true);
@@ -36,7 +35,7 @@ const Vendor = () => {
 
   const handleClick = async (vendorId: any) => {
     setLoading(true);
-    await VendorService.deleteVendor(vendorId);
+    await VendorService.updateVendor(vendorId);
     await getVendors()
   };
 
@@ -53,7 +52,7 @@ const Vendor = () => {
               </div>
             </div>
           </div>
-        </div> {/* Row end  */}
+        </div>
         <div className="row g-3 mb-3">
           <VendorFilter />
           <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
@@ -79,10 +78,10 @@ const Vendor = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {vendor.map((vendor: any) => {
+                            {vendor.map((vendor: any, index:number) => {
                               return (
-                                <tr key={vendor._id}>
-                                  <td><strong>#{index +=1}</strong></td>
+                                <tr key={vendor._id} style={{ backgroundColor: !vendor.isActive ? '#f5eacb' :''}}>
+                                  <td><strong>#{index+1}</strong></td>
                                   <td>
                                     <a href="customer-detail.html">
                                       <img className="avatar rounded" src="assets/images/xs/avatar1.svg" alt="" />

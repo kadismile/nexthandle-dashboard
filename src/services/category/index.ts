@@ -1,5 +1,5 @@
 import {client} from '../../utils/api-client'
-interface IUser {
+interface IProduct {
   token?: string,
   name?: string,
   email?: string,
@@ -9,10 +9,10 @@ interface IUser {
 class CategoryService {
   public serverUrl = process.env.REACT_APP_BACKEND_URL ;
 
-  async getCategories(): Promise<IUser> {
+  async getCategories(params:any): Promise<IProduct> {
     try {
       return await client(
-        `${this.serverUrl}/category`,
+        `${this.serverUrl}/category?${params}`,
         {data: null, type: null, headers: {}}
       );
     } catch (e) {
@@ -20,7 +20,7 @@ class CategoryService {
     }
   }
 
-  async uploadCategoryCsv(formData: any): Promise<IUser> {
+  async uploadCategoryCsv(formData: any): Promise<IProduct> {
     try {
       const response = await client(
         `${this.serverUrl}/category/upload`,
@@ -34,7 +34,7 @@ class CategoryService {
     }
   }
 
-  async deleteCategory(categoryId: string): Promise<IUser> {
+  async deleteCategory(categoryId: string): Promise<IProduct> {
     try {
       return await client(
         `${this.serverUrl}/category/remove`,
@@ -45,7 +45,7 @@ class CategoryService {
     }
   }
 
-  async updateCategory(data: any): Promise<IUser> {
+  async updateCategory(data: any): Promise<IProduct> {
     try {
       return await client(
         `${this.serverUrl}/category/update`,
