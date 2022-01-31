@@ -143,15 +143,26 @@ class ProductService {
     }
   }
 
-  async uploadProductCsv(formData: any): Promise<IProduct> {
+  async uploadVariantCsv(formData: any): Promise<IProduct> {
     try {
       const response = await client(
-        `${this.serverUrl}/variant/upload`,
+        `${this.serverUrl}/products/variants/upload`,
         {data: formData , type: true, headers: {}}
       );
       if (!response)
         throw new Error("Cannot login");
       return response
+    } catch (e) {
+      throw e
+    }
+  }
+
+  async deleteVariant(variantId: string): Promise<IProduct> {
+    try {
+      return await client(
+        `${this.serverUrl}/products//variant/delete`,
+        {data: { variantId }, type: null, headers: {}}
+      );
     } catch (e) {
       throw e
     }
