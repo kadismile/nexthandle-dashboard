@@ -5,12 +5,18 @@ export const productSlice = createSlice({
   initialState: {
     products: {
       product: [],
-      productBrand: []
+      productBrand: [],
+      isActive: true
     },
   },
   reducers: {
     setProducts(state:any, action) {
       state.products.product = action.payload
+    },
+
+    setIsActive(state:any, action) {
+      console.log("ACTION**** ", action)
+      state.products.isActive = action.payload.isActive
     },
 
     setBrands(state:any, action) {
@@ -21,9 +27,10 @@ export const productSlice = createSlice({
 });
 
 
-export const { setProducts, setBrands } = productSlice.actions;
+export const { setProducts, setBrands, setIsActive } = productSlice.actions;
 export const selectProduct = (state: any) => state.product.products.product;
 export const selectProductBrand = (state: any) => state.product.products.productBrand;
+export const selectProductIsActive = (state: any) => state.product.products.isActive;
 
 
 export default productSlice.reducer;

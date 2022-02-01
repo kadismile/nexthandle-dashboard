@@ -2,6 +2,9 @@ import React from "react";
 import CategoryFilter from "./CategoryFilter";
 import VendorFilter from "./VendorFilter";
 import DateFilter from "./DateFilter";
+import ActiveFilter from "../../category/category-filter";
+import CategoryActiveFilter from "../../category/category-filter/category-filter";
+import ProductActiveFilter from "./ProductActiveFilter";
 
 const ProductFilter = () => {
   return (
@@ -17,6 +20,7 @@ const ProductFilter = () => {
             </div>
           </div>
         </div>
+        <ProductActiveFilter/>
         <VendorFilter/>
         <CategoryFilter />
         <DateFilter/>
