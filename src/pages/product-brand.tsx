@@ -67,6 +67,32 @@ const ProductBrand = () => {
     return await navigator.clipboard.writeText(catId)
   };
 
+  const handleChange = async (event: { preventDefault: () => void; target: { name: any; value: any; id: any }; }) => {
+    const { id } = event.target;
+    const brand = brands.find( (b: any) => b._id === id);
+    let onOk = async() => {
+      event.preventDefault();
+      setLoading(true);
+      const doc = {
+        brandId: brand._id,
+        isActive: !brand.isActive,
+      };
+      await ProductServices.updateBrand(doc);
+      await fetchBrands()
+    };
+    let onCancel = () => {return};
+    notifier.confirm(
+      'Are you sure?',
+      onOk,
+      onCancel,
+      {
+        labels: {
+          confirm: `Update Brand to ${brand.isActive ? 'InActive ?' : 'Active ?'}`
+        }
+      }
+    )
+  };
+
   return (
     <>
       <div className="body d-flex py-lg-3">
@@ -131,10 +157,18 @@ const ProductBrand = () => {
                                       {moment(brand.createdAt).format('do MMM, YYYY')}
                                     </td>
                                     <td>
-                                      <div className="btn-group" role="group" aria-label="Basic outlined example">
-                                        <button type="button" className="btn btn-outline-secondary" onClick={ () => setSelectedBrand(brand)} data-bs-toggle="modal" data-bs-target="#edit-brand"><i className="icofont-edit text-success" /></button>
-                                        <button type="button" onClick={ () => deleteBrand(brand._id)} className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger" /></button>
+                                      <div className="form-check form-switch position-absolute">
+                                        <input className="form-check-input" type="checkbox" id={brand._id} onChange={handleChange} checked={brand.isActive} />
+                                        <label className="form-check-label" htmlFor="Eaten-switch1">  </label>
                                       </div>
+                                    </td>
+                                    <td>
+                                      <button type="button" className="btn btn-outline-secondary"
+                                              style={{marginTop: '18px'}}
+                                              onClick={ () => setSelectedBrand(brand)}
+                                              data-bs-toggle="modal" data-bs-target="#edit-brand">
+                                        <i className="icofont-edit text-success" />
+                                      </button>
                                     </td>
                                   </tr>)
                               })}
