@@ -8,11 +8,13 @@ import {selectProduct} from "../redux/productSlice";
 import {useSelector} from 'react-redux'
 import Search from "../components/Search";
 import AddProductModal from "../components/modals/add-category-modal";
+import AWN from "awesome-notifications"
 
 const Product = () => {
   const storedProducts = useSelector(selectProduct);
   const [products, setProducts] = useState(storedProducts);
   const [loading, setLoading] = useState(true);
+  let notifier = new AWN();
 
   const getProducts = async () => {
     setLoading(true);
@@ -40,13 +42,27 @@ const Product = () => {
   },[storedProducts]);
 
   const handleChange = async (event: { preventDefault: () => void; target: { name: any; value: any; id: any }; }) => {
-    event.preventDefault();
     const { id } = event.target;
     const product = products.find( (p: any) => p._id === id);
-    product.productId = id;
-    product.isActive = !product.isActive;
-    await ProductService.chaneProductStatus(product);
-    await getProducts()
+    let onOk = async() => {
+      event.preventDefault();
+      setLoading(true);
+      product.productId = id;
+      product.isActive = !product.isActive;
+      await ProductService.chaneProductStatus(product);
+      await getProducts()
+    };
+    let onCancel = () => {return};
+    notifier.confirm(
+      'Are you sure?',
+      onOk,
+      onCancel,
+      {
+        labels: {
+          confirm: `Update Product to ${product.isActive ? 'InActive ?' : 'Active ?'}`
+        }
+      }
+    )
   };
 
   return (
@@ -57,10 +73,6 @@ const Product = () => {
             <div className="border-0 mb-4">
               <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                 <h3 className="fw-bold mb-0 justify-content-start">Products</h3>
-                <button type="button" className="btn btn-primary btn-set-task w-sm-100 justify-content-end" data-bs-toggle="modal" data-bs-target="#upload-product-csv"> <i
-                  className="icofont-plus-circle me-2 fs-6" data-bs-toggle="modal"
-                  data-bs-target="#expadd"> </i> Upload Csv
-                </button>
                 <Search />
               </div>
             </div>
@@ -78,8 +90,9 @@ const Product = () => {
                         return (<div className="card border-0 mb-1" key={product._id}>
                           <div className="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
                             <input className="form-check-input" type="checkbox" id={product._id} onChange={handleChange} checked={product.isActive} />
-                            <label className="form-check-label" htmlFor="Eaten-switch1"> Disable Product </label>
+                            <label className="form-check-label" htmlFor="Eaten-switch1"> </label>
                           </div>
+
                           <div className="card-body d-flex align-items-center flex-column flex-md-row">
                             <a href="product-detail.html">
                               <img className="w120 rounded img-fluid" src={product?.attachments[1]?.url} alt="" />
