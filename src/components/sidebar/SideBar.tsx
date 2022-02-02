@@ -43,6 +43,9 @@ const SideBar = () => {
               <li>
                   <Link to='/product-variant' className={`ms-link ${getActiveLink(['/product-variant'])}`}> Product Variants </Link>
               </li>
+              <li>
+                <Link to='/products-admin' className={`ms-link ${getActiveLink(['/product-admin'])}`}> Admin Products </Link>
+              </li>
             </ul>
           </li>
           <li>
