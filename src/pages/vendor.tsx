@@ -6,11 +6,13 @@ import VendorFilter from "../components/vendor/vendor-filter";
 import Search from "../components/Search";
 import {useSelector} from "react-redux";
 import {selectVendor} from "../redux/vendorSlice";
+import toastr from "toastr";
 
 const Vendor = () => {
   const storedVendors = useSelector(selectVendor);
   const [vendor, setVendor] = useState(storedVendors);
   const [loading, setLoading] = useState(true);
+  const [selectedVendor, setSelectedVendor] = useState(undefined);
 
   const getVendors = async () => {
     setLoading(true);
@@ -37,6 +39,11 @@ const Vendor = () => {
     setLoading(true);
     await VendorService.updateVendor(vendorId);
     await getVendors()
+  };
+
+  const copyToClipBoard = async (catId: string) => {
+    toastr.success('vendor_id copied to clipboard');
+    return await navigator.clipboard.writeText(catId)
   };
 
   return (
@@ -68,7 +75,8 @@ const Vendor = () => {
                           <table id="myProjectTable" className="table table-hover align-middle mb-0" style={{width: '100%'}}>
                             <thead>
                             <tr>
-                              <th>Id</th>
+                              <th>#</th>
+                              <th>vendor id</th>
                               <th>Customers</th>
                               <th>Registered</th>
                               <th>Mail</th>
@@ -83,6 +91,15 @@ const Vendor = () => {
                                 <tr key={vendor._id} style={{ backgroundColor: !vendor.isActive ? '#f5eacb' :''}}>
                                   <td><strong>#{index+1}</strong></td>
                                   <td>
+                                    <a href="#"
+                                       data-bs-toggle="tooltip" data-bs-placement="top" title="copy to clipboard"
+                                       style={{marginRight: '15px'}}
+                                       onClick={() => copyToClipBoard(vendor._id)}>
+                                      <i className="icofont-copy"> </i>
+                                    </a>
+                                    <strong>{(vendor._id).substring(0, 10)}</strong>
+                                  </td>
+                                  <td>
                                     <a href="customer-detail.html">
                                       <img className="avatar rounded" src="assets/images/xs/avatar1.svg" alt="" />
                                       <span className="fw-bold ms-1">{vendor.businessName}</span>
@@ -94,12 +111,20 @@ const Vendor = () => {
                                   <td>{vendor.email}</td>
                                   <td>{vendor.phoneNumber[0]}</td>
                                   <td>18</td>
-                                  <td>
-                                    <div className="btn-group" role="group" aria-label="Basic outlined example">
-                                      <button type="button" className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i className="icofont-edit text-success" /></button>
-                                      <button type="button" onClick={ () => handleClick(vendor._id)} className="btn btn-outline-secondary deleterow"><i className="icofont-ui-delete text-danger" /></button>
+                                  {/*<td>
+                                    <div className="form-check form-switch position-absolute">
+                                      <input className="form-check-input" type="checkbox" id={vendor._id} onChange={handleChange} checked={vendor.isActive} />
+                                      <label className="form-check-label" htmlFor="Eaten-switch1">  </label>
                                     </div>
                                   </td>
+                                  <td>
+                                    <button type="button" className="btn btn-outline-secondary"
+                                            style={{marginTop: '18px'}}
+                                            onClick={ () => setSelectedVendor(cat)}
+                                            data-bs-toggle="modal" data-bs-target="#edit-category">
+                                      <i className="icofont-edit text-success" />
+                                    </button>
+                                  </td>*/}
                                 </tr>)
                             })}
                             </tbody>
