@@ -9,6 +9,7 @@ import Product from "./pages/products";
 import Category from "./pages/caegory";
 import ProductBrand from "./pages/product-brand";
 import ProductVariant from "./pages/product-variant";
+import ProductAdmin from "./pages/products-admin";
 
 
 function AuthenticatedApp() {
@@ -24,6 +25,7 @@ function AuthenticatedApp() {
           <Route path='/products' element={<Product/>} />
           <Route path='/product-brand' element={<ProductBrand/>} />
           <Route path='/product-variant' element={<ProductVariant/>} />
+          <Route path='/products-admin' element={<ProductAdmin/>} />
           <Route path='/categories' element={<Category/>} />
           <Route path='*' element={<NotFoud/>} />
         </Routes>
