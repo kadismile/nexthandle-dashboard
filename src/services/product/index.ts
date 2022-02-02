@@ -168,6 +168,17 @@ class ProductService {
     }
   }
 
+  async updateCategory(data: any): Promise<IProduct> {
+    try {
+      return await client(
+        `${this.serverUrl}/products/variant/update`,
+        {data: { ...data }, type: null, headers: {}}
+      );
+    } catch (e) {
+      throw e
+    }
+  }
+
 }
 
 export default new ProductService();
