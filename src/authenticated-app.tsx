@@ -22,6 +22,7 @@ function AuthenticatedApp() {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/vendors' element={<Vendor/>} />
+          <Route path='/users' element={<Vendor/>} />
           <Route path='/products' element={<Product/>} />
           <Route path='/product-brand' element={<ProductBrand/>} />
           <Route path='/product-variant' element={<ProductVariant/>} />

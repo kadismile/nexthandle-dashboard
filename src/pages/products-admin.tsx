@@ -13,6 +13,7 @@ import ProductActiveFilter from "../components/product/product-filter/ProductAct
 import VendorFilter from "../components/product/product-filter/VendorFilter";
 import CategoryFilter from "../components/product/product-filter/CategoryFilter";
 import DateFilter from "../components/product/product-filter/DateFilter";
+import AddAdminProductModal from "../components/modals/add-admin-products-csv";
 
 const ProductAdmin = () => {
   const storedProducts = useSelector(selectProduct);
@@ -77,7 +78,11 @@ const ProductAdmin = () => {
             <div className="border-0 mb-4">
               <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                 <h3 className="fw-bold mb-0 justify-content-start">Admin Products</h3>
-                <Search />
+                {/*<Search />*/}
+                <button type="button" className="btn btn-primary btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#admin-product"> <i
+                  className="icofont-plus-circle me-2 fs-6" data-bs-toggle="modal"
+                  data-bs-target="#expadd"> </i> Upload Csv
+                </button>
               </div>
             </div>
           </div>
@@ -171,7 +176,7 @@ const ProductAdmin = () => {
         </div>
       </div>
 
-      <AddProductModal/>
+      <AddAdminProductModal/>
     </>
   )
 };

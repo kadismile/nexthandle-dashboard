@@ -60,6 +60,12 @@ const SideBar = () => {
               Vendor
             </Link>
           </li>
+          <li>
+            <Link to='/products-admin' className={`m-link ${getActiveLink(['/products-admin'])}`}>
+              <i className="icofont-funky-man fs-5"/>
+              Users
+            </Link>
+          </li>
           <li className="collapsed">
             <a className="m-link" data-bs-toggle="collapse" data-bs-target="#order" href="#">
               <i className="icofont-notepad fs-5"/> <span>Orders</span> <span
