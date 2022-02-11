@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import moment from 'moment'
-import VendorService from "../services/vendor";
+import UserService from "../services/user";
 import {PageSpinner} from "../components/libs";
 import VendorFilter from "../components/vendor/vendor-filter";
 import Search from "../components/Search";
@@ -17,7 +17,7 @@ const User = () => {
   const getVendors = async () => {
     setLoading(true);
     let params = `isActive=true`;
-    let vendors: any = await VendorService.getVendors(params);
+    let vendors: any = await UserService.fetchUsers(params);
     const {data: {data}} = vendors;
     if (data) {
       setVendor(data);
@@ -37,7 +37,7 @@ const User = () => {
 
   const handleClick = async (vendorId: any) => {
     setLoading(true);
-    await VendorService.updateVendor(vendorId);
+    //await VendorService.updateVendor(vendorId);
     await getVendors()
   };
 
@@ -61,8 +61,8 @@ const User = () => {
             </div>
           </div>
           <div className="row g-3 mb-3">
-            <VendorFilter />
-            <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
+
+            <div className="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
               {
                 loading ?
                   <PageSpinner />
@@ -76,7 +76,7 @@ const User = () => {
                               <thead>
                               <tr>
                                 <th>#</th>
-                                <th>vendor id</th>
+                                <th>user id</th>
                                 <th>Customers</th>
                                 <th>Registered</th>
                                 <th>Mail</th>
@@ -97,7 +97,7 @@ const User = () => {
                                          onClick={() => copyToClipBoard(vendor._id)}>
                                         <i className="icofont-copy"> </i>
                                       </a>
-                                      <strong>{(vendor._id).substring(0, 10)}</strong>
+                                      <strong>{(vendor._id).substring(0, 15)}</strong>
                                     </td>
                                     <td>
                                       <a href="customer-detail.html">

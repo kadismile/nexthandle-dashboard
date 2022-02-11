@@ -16,7 +16,7 @@ function App() {
     ( async () => {
       if (authToken?.user?.token?.length) {
         setLoading(true);
-        let data: any = await Userservice.fetchUser();
+        let data: any = await Userservice.getUser();
         if (data?.status === "success") {
           setLoading(false);
           setUser(data.user)
