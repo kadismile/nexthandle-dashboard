@@ -178,6 +178,19 @@ class ProductService {
       throw e
     }
   }
+  async uploadProductCsv(formData: any): Promise<IProduct> {
+    try {
+      const response = await client(
+          `${this.serverUrl}/products/upload`,
+          {data: formData , type: true, headers: {}}
+      );
+      if (!response)
+        throw new Error("Cannot login");
+      return response
+    } catch (e) {
+      throw e
+    }
+  }
 
 }
 
