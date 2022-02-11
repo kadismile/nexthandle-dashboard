@@ -61,7 +61,7 @@ const SideBar = () => {
             </Link>
           </li>
           <li>
-            <Link to='/products-admin' className={`m-link ${getActiveLink(['/products-admin'])}`}>
+            <Link to='/users' className={`m-link ${getActiveLink(['/users'])}`}>
               <i className="icofont-funky-man fs-5"/>
               Users
             </Link>

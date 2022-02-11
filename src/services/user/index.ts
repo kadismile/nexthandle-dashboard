@@ -34,11 +34,22 @@ class UserService {
     }
   }
 
-  async fetchUser(): Promise<IUser> {
+  async getUser(): Promise<IUser> {
     try {
       return await client(
         `${this.serverUrl}/users/get`,
         {data: null, type: null, headers: {}}
+      );
+    } catch (e) {
+      throw e
+    }
+  }
+
+  async fetchUsers(params:string): Promise<IUser> {
+    try {
+      return await client(
+          `${this.serverUrl}/users/fetch?${params}`,
+          {data: null, type: null, headers: {}}
       );
     } catch (e) {
       throw e

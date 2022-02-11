@@ -10,6 +10,7 @@ import Category from "./pages/caegory";
 import ProductBrand from "./pages/product-brand";
 import ProductVariant from "./pages/product-variant";
 import ProductAdmin from "./pages/products-admin";
+import User from "./pages/user";
 
 
 function AuthenticatedApp() {
@@ -22,7 +23,7 @@ function AuthenticatedApp() {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/vendors' element={<Vendor/>} />
-          <Route path='/users' element={<Vendor/>} />
+          <Route path='/users' element={<User/>} />
           <Route path='/products' element={<Product/>} />
           <Route path='/product-brand' element={<ProductBrand/>} />
           <Route path='/product-variant' element={<ProductVariant/>} />
