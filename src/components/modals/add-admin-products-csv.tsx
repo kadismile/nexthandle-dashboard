@@ -13,20 +13,33 @@ const AddAdminProductModal = () => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
 
-  const downloadSampleCsv = async () => {
-    let data = [{
-      name: "Samsung S21"
-    }];
+  const downloadSampleCsv = async (csvErrors: any) => {
+    let data;
+    if (!csvErrors) {
+      data = [{
+        name: "Samsung S21",
+        description: "its a pretty cool phone with the a god quality camera",
+        productVariantId: "mk2Hl9OGX8KTwSzgFiUHmoN17",
+        price: 180000,
+        user: 'kI2rZM9ZEmZJBqqWpSghaTv20',
+        vendor: 'W3YFCmjT3eOleTzeoBk0Jh6kW',
+        category: 'MxbVegCaHNmKgtPuqKvs7gh63',
+        productBrand: 'meLpyhe5xwzaTYFSEHfNARxP0',
+        condition: 'Open-box',
+      }];
+    } else {
+      data = csvErrors
+    }
     const options = {
       fieldSeparator: ",",
       quoteStrings: '"',
       decimalSeparator: ".",
       showLabels: true,
       showTitle: false,
-      title: "Product Brand Sample",
+      title: csvErrors ? "Error In Csv Uploaded" : "Admin Product Sample",
       useTextFile: false,
       useBom: true,
-      filename: "Brand CSV",
+      filename: csvErrors ? "Error_Product" : "Product",
       useKeysAsHeaders: true
     };
     const csvExporter = new ExportToCsv(options);
@@ -57,13 +70,14 @@ const AddAdminProductModal = () => {
     });
     let formData = new FormData();
     formData.append('myImage', file[0]);
-    let data: any = await ProductService.uploadBrandCsv(formData);
-    const { status, error } = data;
-    if (error) {
-      toastr.error('Error uploading csv file')
+    let csvResponse: any = await ProductService.uploadProductCsv(formData);
+    const { status, data} = csvResponse;
+    if (status === 'failed') {
+      toastr.error('Error uploading some values in csv file')
+      await downloadSampleCsv(data)
     }
     if (status === 'success') {
-      toastr.success("categories uploaded successfully")
+      toastr.success("products uploaded successfully")
       dispatch(setCategories(true));
     }
   };
