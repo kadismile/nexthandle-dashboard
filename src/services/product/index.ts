@@ -20,6 +20,17 @@ class ProductService {
     }
   }
 
+  async getAdminProducts(params:any): Promise<IProduct> {
+    try {
+      return await client(
+          `${this.serverUrl}/products/admin?${params}`,
+          {data: null, type: null, headers: {}}
+      );
+    } catch (e) {
+      throw e
+    }
+  }
+
   async getBrands(params:any): Promise<IProduct> {
     try {
       return await client(
@@ -81,7 +92,7 @@ class ProductService {
   async uploadBrandCsv(formData: any): Promise<IProduct> {
     try {
       const response = await client(
-        `${this.serverUrl}/brands/upload`,
+        `${this.serverUrl}/products/brand/upload`,
         {data: formData , type: true, headers: {}}
       );
       if (!response)

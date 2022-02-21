@@ -3,14 +3,9 @@ import moment from 'moment'
 import ProductService from "../services/product";
 import {formatTotal, toUpperCase} from "../utils/helpers";
 import {PageSpinner} from "../components/libs";
-import ProductFilter from "../components/product/product-filter";
 import {selectProduct} from "../redux/productSlice";
 import {useSelector} from 'react-redux'
-import Search from "../components/Search";
-import AddProductModal from "../components/modals/add-category-modal";
 import AWN from "awesome-notifications"
-import ProductActiveFilter from "../components/product/product-filter/ProductActiveFilter";
-import VendorFilter from "../components/product/product-filter/VendorFilter";
 import CategoryFilter from "../components/product/product-filter/CategoryFilter";
 import DateFilter from "../components/product/product-filter/DateFilter";
 import AddAdminProductModal from "../components/modals/add-admin-products-csv";
@@ -24,7 +19,7 @@ const ProductAdmin = () => {
   const getProducts = async () => {
     setLoading(true);
     let params = '';
-    let products: any = await ProductService.getProducts(params);
+    let products: any = await ProductService.getAdminProducts(params);
     const {data: {data}} = products;
     if (data) {
       setProducts(data)
@@ -111,16 +106,13 @@ const ProductAdmin = () => {
                   <>
                     <div className="card mb-3 bg-transparent p-2">
                       {products.map((product:any) => {
-                        /*return (<div className="card border-0 mb-1" key={product._id}>
+                        return (<div className="card border-0 mb-1" key={product._id}>
                           <div className="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
                             <input className="form-check-input" type="checkbox" id={product._id} onChange={handleChange} checked={product.isActive} />
                             <label className="form-check-label" htmlFor="Eaten-switch1"> </label>
                           </div>
 
                           <div className="card-body d-flex align-items-center flex-column flex-md-row">
-                            <a href="product-detail.html">
-                              <img className="w120 rounded img-fluid" src={product?.attachments[1]?.url} alt="" />
-                            </a>
                             <div className="ms-md-4 m-0 mt-4 mt-md-0 text-md-start text-center w-100">
                               <a href="product-detail.html"><h6 className="mb-3 fw-bold">{product.name}
                                 <span className="text-muted small fw-light d-block">{product.category.name}</span></h6></a>
@@ -147,7 +139,7 @@ const ProductAdmin = () => {
                               </div>
                             </div>
                           </div>
-                        </div>)*/
+                        </div>)
                       })}
                     </div>
                     <div className="row g-3 mb-3">

@@ -21,8 +21,6 @@ const AddAdminProductModal = () => {
         description: "its a pretty cool phone with the a god quality camera",
         productVariantId: "mk2Hl9OGX8KTwSzgFiUHmoN17",
         price: 180000,
-        user: 'kI2rZM9ZEmZJBqqWpSghaTv20',
-        vendor: 'W3YFCmjT3eOleTzeoBk0Jh6kW',
         category: 'MxbVegCaHNmKgtPuqKvs7gh63',
         productBrand: 'meLpyhe5xwzaTYFSEHfNARxP0',
         condition: 'Open-box',
