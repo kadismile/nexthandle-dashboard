@@ -24,7 +24,6 @@ const Search = () => {
       textSearch()
     }
   };
-  console.log(searchResults)
 
   return (
     <>
