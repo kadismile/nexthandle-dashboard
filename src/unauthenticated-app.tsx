@@ -2,7 +2,6 @@ import React from 'react'
 import {Routes, Route} from "react-router-dom";
 
 import {Login} from "./pages/auth/login";
-import {LoginToken} from "./pages/auth/login-token";
 import {NotFoud} from "./components/404";
 
 function UnauthenticatedApp() {
@@ -30,21 +29,21 @@ function UnAuthenticatedRoutes() {
 }
 
 
-interface Item {
+/*interface Item {
   title: string;
   id: number;
 }
 
 interface ChildComponentProps {
   items: Item[]
-}
+}*/
 
 function ResetPasswordRoute () {
-  const { href } = window.location;
+  /*const { href } = window.location;
   const token = href
     .substr(href.search("reset-password-token"))
     .split("token=")[0]
-    .split("reset-password-token/")[1];
+    .split("reset-password-token/")[1];*/
 
   return (
     <Routes>

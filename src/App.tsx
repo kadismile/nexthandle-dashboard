@@ -14,7 +14,6 @@ function App() {
 
   useEffect(()=> {
     ( async () => {
-      if (authToken?.user?.token?.length) {
         setLoading(true);
         let data: any = await Userservice.getUser();
         if (data?.status === "success") {
@@ -23,9 +22,8 @@ function App() {
         } else {
           setLoading(false);
         }
-      }
     })()
-  }, []);
+  }, [authToken?.user?.token?.length]);
   
   return (
     loading ? <FullPageSpinner/> :

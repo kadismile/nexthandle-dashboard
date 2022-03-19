@@ -66,6 +66,7 @@ const CategoryModal = () => {
       toastr.success("categories uploaded successfully")
       dispatch(setCategories(true));
     }
+    setLoading(false);
   };
 
   const {errors} = formValues;

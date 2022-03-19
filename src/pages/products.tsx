@@ -81,7 +81,7 @@ const Product = () => {
             <ProductFilter />
             <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
               {
-                loading ?
+                loading && !products.length ?
                   <PageSpinner />
                  :
                   <>
@@ -99,7 +99,7 @@ const Product = () => {
                             </a>
                             <div className="ms-md-4 m-0 mt-4 mt-md-0 text-md-start text-center w-100">
                               <a href="product-detail.html"><h6 className="mb-3 fw-bold">{product.name}
-                                <span className="text-muted small fw-light d-block">{product.category.name}</span></h6></a>
+                                <span className="text-muted small fw-light d-block">{product?.category?.name}</span></h6></a>
                               <div className="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
                                 <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
                                   <div className="text-muted small">Date Added</div>

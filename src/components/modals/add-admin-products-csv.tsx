@@ -13,9 +13,9 @@ const AddAdminProductModal = () => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
 
-  const downloadSampleCsv = async (csvErrors: any) => {
+  const downloadCsv = async (csvErrors: any) => {
     let data;
-    if (!csvErrors) {
+    if (csvErrors.type === "click") {
       data = [{
         name: "Samsung S21",
         description: "its a pretty cool phone with the a god quality camera",
@@ -37,7 +37,7 @@ const AddAdminProductModal = () => {
       title: csvErrors ? "Error In Csv Uploaded" : "Admin Product Sample",
       useTextFile: false,
       useBom: true,
-      filename: csvErrors ? "Error_Product" : "Product",
+      filename: csvErrors.type ? "Product" : "Error_Product",
       useKeysAsHeaders: true
     };
     const csvExporter = new ExportToCsv(options);
@@ -72,7 +72,7 @@ const AddAdminProductModal = () => {
     const { status, data} = csvResponse;
     if (status === 'failed') {
       toastr.error('Error uploading some values in csv file')
-      await downloadSampleCsv(data)
+      await downloadCsv(data)
     }
     if (status === 'success') {
       toastr.success("products uploaded successfully")
@@ -88,14 +88,14 @@ const AddAdminProductModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title  fw-bold" id="expaddLabel">Upload Product CSv </h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
           </div>
           <div className="modal-body">
             <div className="deadline-form">
               <form className="needs-validation" noValidate>
                 <div className="form-row">
 
-                  <p>Kindly click <a href="#" onClick={downloadSampleCsv}> <span style={{color: 'blue'}}>here</span></a> for a sample upload</p>
+                  <p>Kindly click <a href="#" onClick={downloadCsv}> <span style={{color: 'blue'}}>here</span></a> for a sample upload</p>
                   <div className="col-md-12 mb-4">
                     <label htmlFor="validationCustom01">CSV file</label>
                     <input type="file" name="file" onChange={handleChange} className="dropify" data-height="90" data-allowed-file-extensions="csv" data-max-file-size="500K"/>
