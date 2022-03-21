@@ -23,7 +23,7 @@ const Header = () => {
               </a>
             </div>
             <div className="dropdown zindex-popover">
-              <a className="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+              <a className="nav-link dropdown-toggle pulse" href="/#" role="button" data-bs-toggle="dropdown">
                 <img src="/assets/images/flag/GB.png" alt=""/>
               </a>
               <div
@@ -67,7 +67,7 @@ const Header = () => {
                     <div className="tab-pane fade show active">
                       <ul className="list-unstyled list mb-0">
                         <li className="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <img className="avatar rounded-circle" src="/assets/images/xs/avatar1.svg" alt=""/>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Chloe Walkerr</span>
@@ -78,7 +78,7 @@ const Header = () => {
                           </a>
                         </li>
                         <li className="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <div className="avatar rounded-circle no-thumbnail">AH</div>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Alan	Hill</span>
@@ -88,7 +88,7 @@ const Header = () => {
                           </a>
                         </li>
                         <li className="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <img className="avatar rounded-circle" src="/assets/images/xs/avatar3.svg" alt=""/>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Melanie	Oliver</span>
@@ -98,7 +98,7 @@ const Header = () => {
                           </a>
                         </li>
                         <li className="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <img className="avatar rounded-circle" src="/assets/images/xs/avatar5.svg" alt=""/>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Boris Hart</span>
@@ -108,7 +108,7 @@ const Header = () => {
                           </a>
                         </li>
                         <li className="py-2 mb-1 border-bottom">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <img className="avatar rounded-circle" src="/assets/images/xs/avatar6.svg" alt=""/>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Alan	Lambert</span>
@@ -118,7 +118,7 @@ const Header = () => {
                           </a>
                         </li>
                         <li className="py-2">
-                          <a href="javascript:void(0);" className="d-flex">
+                          <a href="#" className="d-flex">
                             <img className="avatar rounded-circle" src="/assets/images/xs/avatar7.svg" alt=""/>
                             <div className="flex-fill ms-2">
                               <p className="d-flex justify-content-between mb-0 "><span className="font-weight-bold">Zoe Wright</span>

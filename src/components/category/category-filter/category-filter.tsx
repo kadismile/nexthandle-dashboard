@@ -14,7 +14,7 @@ const CategoryActiveFilter = () => {
       const {data: {data}} = vendors;
       dispatch(setCategories(data))
     })()
-  },[active]);
+  }, [active]);
 
   const handleChange = async () => {
     setActive(!active)

@@ -13,25 +13,33 @@ const CategoryModal = () => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
 
-  const downloadSampleCsv = async () => {
-    let data = [{
-      name: "toletries"
-    }];
+  const downloadCsv = async (csvErrors: any) => {
+    let data;
+    if (csvErrors && csvErrors.type === "click") {
+      data = [{
+        name: "toletries"
+      }];
+    } else {
+      data = csvErrors
+    }
     const options = {
       fieldSeparator: ",",
       quoteStrings: '"',
       decimalSeparator: ".",
       showLabels: true,
       showTitle: false,
-      title: "Category Sample",
+      title: csvErrors ? "Error In Csv Uploaded" : "Category Sample",
       useTextFile: false,
       useBom: true,
-      filename: "Category CSV",
+      filename: csvErrors?.type ? "Category CSV" : "Error_Category",
       useKeysAsHeaders: true
     };
     const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv(data);
+    if (data) {
+      csvExporter.generateCsv(data);
+    }
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     let { name, value } = event.target;
@@ -57,15 +65,21 @@ const CategoryModal = () => {
     });
     let formData = new FormData();
     formData.append('myImage', file[0]);
-    let data: any = await ProductService.uploadCategoryCsv(formData);
-    const { status, error } = data;
+    let csvResponse: any  = await ProductService.uploadCategoryCsv(formData);
+    const { status, error, data } = csvResponse;
+    console.log(csvResponse )
+    if (status === 'failed') {
+      toastr.error('Error uploading some values in csv file')
+      await downloadCsv(data)
+    }
+    if (status === 'success') {
+      toastr.success("products uploaded successfully")
+      dispatch(setCategories(true));
+    }
     if (error) {
       toastr.error('Error uploading csv file')
     }
-    if (status === 'success') {
-      toastr.success("categories uploaded successfully")
-      dispatch(setCategories(true));
-    }
+    setLoading(false);
   };
 
   const {errors} = formValues;
@@ -83,7 +97,7 @@ const CategoryModal = () => {
               <form className="needs-validation" noValidate>
                 <div className="form-row">
 
-                  <p>Kindly click <a href="#" onClick={downloadSampleCsv}> <span style={{color: 'blue'}}>here</span></a> for a sample upload</p>
+                  <p>Kindly click <a href="#" onClick={downloadCsv}> <span style={{color: 'blue'}}>here</span></a> for a sample upload</p>
                   <div className="col-md-12 mb-4">
                     <label htmlFor="validationCustom01">CSV file</label>
                     <input type="file" name="file" onChange={handleChange} className="dropify" data-height="90" data-allowed-file-extensions="csv" data-max-file-size="500K"/>

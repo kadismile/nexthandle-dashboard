@@ -2,7 +2,6 @@ import React from 'react'
 import {Routes, Route} from "react-router-dom";
 
 import {Login} from "./pages/auth/login";
-import {LoginToken} from "./pages/auth/login-token";
 import {NotFoud} from "./components/404";
 
 function UnauthenticatedApp() {

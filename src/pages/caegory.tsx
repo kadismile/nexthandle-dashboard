@@ -164,7 +164,7 @@ const Category = () => {
                       <div className="col-sm-12">
                         <div className="card mb-3">
                           <div className="card-body">
-                            <h3 style={{textAlign: 'center'}}> No Vendors </h3>
+                            <h3 style={{textAlign: 'center'}}> No Categories </h3>
                           </div>
                         </div>
                       </div>
