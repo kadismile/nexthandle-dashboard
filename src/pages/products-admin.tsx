@@ -16,8 +16,6 @@ const ProductAdmin = () => {
   const [loading, setLoading] = useState(true);
   let notifier = new AWN();
 
-  console.log("Products =======> ", products)
-
   const getProducts = async () => {
     setLoading(true);
     let params = '';
@@ -123,7 +121,7 @@ const ProductAdmin = () => {
                                 <div className="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
                                   <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
                                     <div className="text-muted small">Date Added</div>
-                                    <strong>{moment(product?.createdAt).format('do MMM, YYYY')}</strong>
+                                    <strong>{moment(product?.createdAt).format('DD-MMM-YYYY')}</strong>
                                   </div>
                                   <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
                                     <div className="text-muted small">Condition</div>

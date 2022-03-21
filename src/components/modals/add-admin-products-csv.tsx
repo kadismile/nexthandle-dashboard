@@ -15,7 +15,7 @@ const AddAdminProductModal = () => {
 
   const downloadCsv = async (csvErrors: any) => {
     let data;
-    if (csvErrors.type === "click") {
+    if (csvErrors && csvErrors.type === "click") {
       data = [{
         name: "Samsung S21",
         description: "its a pretty cool phone with the a god quality camera",
@@ -37,11 +37,13 @@ const AddAdminProductModal = () => {
       title: csvErrors ? "Error In Csv Uploaded" : "Admin Product Sample",
       useTextFile: false,
       useBom: true,
-      filename: csvErrors.type ? "Product" : "Error_Product",
+      filename: csvErrors?.type ? "Product" : "Error_Product",
       useKeysAsHeaders: true
     };
     const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv(data);
+    if (data) {
+      csvExporter.generateCsv(data);
+    }
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -56,6 +58,7 @@ const AddAdminProductModal = () => {
       };
     });
   };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const { file } = formValues;

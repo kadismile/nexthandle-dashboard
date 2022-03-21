@@ -31,7 +31,7 @@ const Category = () => {
     ( async ()=> {
       await fetchCategories()
     })()
-  },);
+  },[]);
 
   useEffect(()=> {
     ( async ()=> {

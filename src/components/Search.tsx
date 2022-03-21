@@ -28,14 +28,12 @@ const Search = () => {
 
   return (
     <>
-
       <div className="btn-group group-link btn-set-task w-sm-100">
         <input type="search" className="form-control" name="serach" onChange={(e) => handleChange(e)} placeholder="Search" aria-label="search" aria-describedby="addon-wrapping"/>
         <button type="button" className="input-group-text" id="addon-wrapping"><i className="fa fa-search"> </i></button>
       </div>
 
     </>
-
   )
 };
 
