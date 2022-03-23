@@ -1,61 +1,67 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import validator from "validator";
-import toastr from 'toastr'
+import toastr from "toastr";
 
-import UserService from '../../services/user'
-import {useDispatch} from "react-redux";
-import {setUser} from "../../redux/userSlice";
-import {DisabledButton} from "../../components/libs";
+import UserService from "../../services/user";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/userSlice";
+import { DisabledButton } from "../../components/libs";
 
 function Login() {
   const formFields = {
     email: "",
-    password: ""
+    password: "",
   };
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  });
   const [submitForm, setSubmitForm] = useState(false);
   const disableForm = () => {
     let newValues = { ...formValues };
     let isError = false;
     for (let val of Object.values(newValues)) {
       if (val === "") {
-        isError = true
+        isError = true;
       }
     }
     if (isError && submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return true
+      return true;
     }
     if (isError && !submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return false
+      return false;
     }
   };
-  const handleChange = (event: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
+  const handleChange = (event: {
+    preventDefault: () => void;
+    target: { name: any; value: any };
+  }) => {
     event.preventDefault();
     let { name, value } = event.target;
     let errors = formValues.errors;
     validateForm(name, errors, value);
-    setFormValues(prevState => {
+    setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
         [name]: value,
-      }
+      };
     });
     for (let val of Object.values(formValues.errors)) {
       if (val !== "") {
-        setSubmitForm(false)
+        setSubmitForm(false);
       }
     }
   };
-  const validateForm = (name:any, errors:any, value:any) => {
+  const validateForm = (name: any, errors: any, value: any) => {
     switch (name) {
       case "email":
         errors.email = "";
@@ -83,7 +89,7 @@ function Login() {
         break;
     }
   };
-  const  handleSubmit =  async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     setLoading(true);
     const { email, password } = formValues;
@@ -91,21 +97,25 @@ function Login() {
     let { message, status, token, user }: any = response;
     if (status === "success") {
       setLoading(false);
-      dispatch(setUser({token, ...user}));
+      dispatch(setUser({ token, ...user }));
       toastr.success(message);
-      window.location.replace("/")
+      window.location.replace("/");
     } else {
       setLoading(false);
-      toastr.error('Invalid Credentials');
+      toastr.error("Invalid Credentials");
     }
   };
+
   return (
     <div className="main p-2 py-3 p-xl-5 ">
       <div className="body d-flex p-0 p-xl-5">
         <div className="container-xxl">
           <div className="row g-0">
             <div className="col-lg-12 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100">
-              <div className="w-100 p-3 p-md-5 card border-0 shadow-sm" style={{maxWidth: '32rem'}}>
+              <div
+                className="w-100 p-3 p-md-5 card border-0 shadow-sm"
+                style={{ maxWidth: "32rem" }}
+              >
                 <form className="row g-1 p-3 p-md-4">
                   <div className="col-12 text-center mb-5">
                     <h1>Login</h1>
@@ -128,10 +138,15 @@ function Login() {
                   <div className="col-12">
                     <div className="mb-2">
                       <div className="form-label">
-                          <span className="d-flex justify-content-between align-items-center">
-                            Password
-                            <a className="text-secondary" href="auth-password-reset.html">Forgot Password?</a>
-                          </span>
+                        <span className="d-flex justify-content-between align-items-center">
+                          Password
+                          <a
+                            className="text-secondary"
+                            href="auth-password-reset.html"
+                          >
+                            Forgot Password?
+                          </a>
+                        </span>
                       </div>
                       <input
                         type="password"
@@ -146,23 +161,46 @@ function Login() {
                   </div>
                   <div className="col-12">
                     <div className="form-check">
-                      <input className="form-check-input" type="checkbox"  id="flexCheckDefault" />
-                      <label className="form-check-label" htmlFor="flexCheckDefault">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="flexCheckDefault"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
                         Remember me
                       </label>
                     </div>
                   </div>
                   <div className="col-12 text-center mt-4">
-                    {disableForm() ?
-                      <DisabledButton /> :
+                    {disableForm() ? (
+                      <DisabledButton />
+                    ) : !loading ? (
                       <button
                         type="button"
                         className="btn btn-primary btn-large waves-effect waves-light"
-                        style={{width: "200px", fontSize: "16px"}}
+                        style={{ width: "200px", fontSize: "16px" }}
                         onClick={handleSubmit}
-                      > SIGN IN
+                      >
+                        {" "}
+                        SIGN IN
                       </button>
-                    }
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-large waves-effect waves-light"
+                        style={{ width: "200px", fontSize: "16px" }}
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span className="sr-only">Loading...</span>
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>
@@ -171,7 +209,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export {Login}
+export { Login };

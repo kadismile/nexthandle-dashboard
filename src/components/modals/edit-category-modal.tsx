@@ -1,66 +1,75 @@
-import React, {useEffect, useState} from 'react'
-import toastr from 'toastr';
-import CategoryService from '../../services/category'
-import {useDispatch} from "react-redux";
-import {DisabledButton} from "../libs";
-import {updateCategories} from "../../redux/categorySlice";
+import React, { useEffect, useState } from "react";
+import toastr from "toastr";
+import CategoryService from "../../services/category";
+import { useDispatch } from "react-redux";
+import { DisabledButton } from "../libs";
+import { updateCategories } from "../../redux/categorySlice";
 
 const EditCategoryModal = (props: any) => {
   let { category }: any = props;
-  useEffect(()=> {
-    setFormValues(prevState => {
+
+  useEffect(() => {
+    setFormValues((prevState) => {
       return {
         ...prevState,
-        name: category?.name || '',
-      }
+        name: category?.name || "",
+      };
     });
-  },[props]);
+  }, [props, category?.name]);
   const dispatch = useDispatch();
   const formFields = {
-    name: '',
+    name: "",
   };
-  const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  });
   const [submitForm, setSubmitForm] = useState(false);
   const disableForm = () => {
     let newValues = { ...formValues };
     let isError = false;
     for (let val of Object.values(newValues)) {
       if (val === "") {
-        isError = true
+        isError = true;
       }
     }
     if (isError && submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return true
+      return true;
     }
     if (isError && !submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return false
+      return false;
     }
   };
-  const handleChange = (event: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
+
+  const handleChange = (event: {
+    preventDefault: () => void;
+    target: { name: any; value: any };
+  }) => {
     event.preventDefault();
     let { name, value } = event.target;
     let errors = formValues.errors;
     validateForm(name, errors, value);
-    setFormValues(prevState => {
+    setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
         [name]: value,
-      }
+      };
     });
     for (let val of Object.values(formValues.errors)) {
       if (val !== "") {
-        setSubmitForm(false)
+        setSubmitForm(false);
       }
     }
   };
-  const validateForm = (name:any, errors:any, value:any) => {
+
+  const validateForm = (name: any, errors: any, value: any) => {
     switch (name) {
       case "name":
         errors.name = "";
@@ -76,30 +85,43 @@ const EditCategoryModal = (props: any) => {
         break;
     }
   };
-  const  handleSubmit =  async (event: { preventDefault: () => void; }) => {
+
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     const { name } = formValues;
     const catData = {
       categoryId: category._id,
-      name
+      name,
     };
     let response: any = await CategoryService.updateCategory(catData);
     let { status, data }: any = response;
     if (status === "success") {
       dispatch(updateCategories(data));
-      toastr.success('category saved successfully');
+      toastr.success("category saved successfully");
     } else {
-      toastr.error('category updated successfully');
+      toastr.error("category updated successfully");
     }
   };
 
   return (
-    <div className="modal fade" id="edit-category" tabIndex={-1} aria-hidden="true">
+    <div
+      className="modal fade"
+      id="edit-category"
+      tabIndex={-1}
+      aria-hidden="true"
+    >
       <div className="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title  fw-bold" id="expaddLabel">Edit Category</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 className="modal-title  fw-bold" id="expaddLabel">
+              Edit Category
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div className="modal-body">
             <div className="col-12">
@@ -117,23 +139,26 @@ const EditCategoryModal = (props: any) => {
           </div>
           <div className="modal-footer">
             <div className="col-12 text-center mt-4">
-              {disableForm() ?
-                <DisabledButton /> :
+              {disableForm() ? (
+                <DisabledButton />
+              ) : (
                 <button
                   type="button"
                   className="btn btn-primary btn-large waves-effect waves-light"
-                  style={{width: "200px", fontSize: "16px"}}
+                  style={{ width: "200px", fontSize: "16px" }}
                   onClick={handleSubmit}
                   data-bs-dismiss="modal"
-                > Submit
+                >
+                  {" "}
+                  Submit
                 </button>
-              }
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditCategoryModal
+export default EditCategoryModal;

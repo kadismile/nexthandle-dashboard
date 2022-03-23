@@ -1,15 +1,15 @@
-import React from 'react'
-import {Routes, Route} from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import {Login} from "./pages/auth/login";
-import {NotFoud} from "./components/404";
+import { Login } from "./pages/auth/login";
+import { NotFound } from "./components/404";
 
 function UnauthenticatedApp() {
   return (
     <>
       <UnAuthenticatedRoutes />
     </>
-  )
+  );
 }
 
 function UnAuthenticatedRoutes() {
@@ -28,7 +28,6 @@ function UnAuthenticatedRoutes() {
   }
 }
 
-
 /*interface Item {
   title: string;
   id: number;
@@ -38,7 +37,7 @@ interface ChildComponentProps {
   items: Item[]
 }*/
 
-function ResetPasswordRoute () {
+function ResetPasswordRoute() {
   /*const { href } = window.location;
   const token = href
     .substr(href.search("reset-password-token"))
@@ -47,12 +46,21 @@ function ResetPasswordRoute () {
 
   return (
     <Routes>
-      <Route path='/'> <Login /> </Route>
+      <Route path="/">
+        {" "}
+        <Login />{" "}
+      </Route>
       {/*<Route path="/reset-password-token"> <ResetPassword  resetPasswordToken={token}/> </Route>*/}
-      <Route path="/login"> <Login/> </Route>
-      <Route path='*'> <NotFoud /> </Route>
+      <Route path="/login">
+        {" "}
+        <Login />{" "}
+      </Route>
+      <Route path="*">
+        {" "}
+        <NotFound />{" "}
+      </Route>
     </Routes>
   );
 }
 
-export default UnauthenticatedApp
+export default UnauthenticatedApp;

@@ -2,8 +2,8 @@ import React from "react";
 import CategoryFilter from "./CategoryFilter";
 import VendorFilter from "./VendorFilter";
 import DateFilter from "./DateFilter";
-import ActiveFilter from "../../category/category-filter";
-import CategoryActiveFilter from "../../category/category-filter/category-filter";
+// import ActiveFilter from "../../category/category-filter";
+// import CategoryActiveFilter from "../../category/category-filter/category-filter";
 import ProductActiveFilter from "./ProductActiveFilter";
 
 const ProductFilter = () => {
@@ -16,17 +16,19 @@ const ProductFilter = () => {
               <h4 className="title">Filter</h4>
             </div>
             <div className="filter-btn">
-              <a className="btn btn-primary" href="#">Reset</a>
+              <a className="btn btn-primary" href="/#">
+                Reset
+              </a>
             </div>
           </div>
         </div>
-        <ProductActiveFilter/>
-        <VendorFilter/>
+        <ProductActiveFilter />
+        <VendorFilter />
         <CategoryFilter />
-        <DateFilter/>
+        <DateFilter />
       </div>
     </div>
-  )
+  );
 };
 
-export default ProductFilter
+export default ProductFilter;
