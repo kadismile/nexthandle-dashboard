@@ -67,7 +67,6 @@ const CategoryModal = () => {
     formData.append('myImage', file[0]);
     let csvResponse: any  = await ProductService.uploadCategoryCsv(formData);
     const { status, error, data } = csvResponse;
-    console.log(csvResponse )
     if (status === 'failed') {
       toastr.error('Error uploading some values in csv file')
       await downloadCsv(data)
