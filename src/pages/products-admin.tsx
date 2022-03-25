@@ -71,35 +71,35 @@ const ProductAdmin = () => {
 
   return (
     <>
-      {products.length ? (
-        <div className="body d-flex py-3">
-          <div className="container-xxl">
-            <div className="row align-items-center">
-              <div className="border-0 mb-4">
-                <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                  <h3 className="fw-bold mb-0 justify-content-start">
-                    Admin Products
-                  </h3>
-                  {/*<Search />*/}
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-set-task w-sm-100"
+      <div className="body d-flex py-3">
+        <div className="container-xxl">
+          <div className="row align-items-center">
+            <div className="border-0 mb-4">
+              <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                <h3 className="fw-bold mb-0 justify-content-start">
+                  Admin Products
+                </h3>
+                {/*<Search />*/}
+                <button
+                  type="button"
+                  className="btn btn-primary btn-set-task w-sm-100"
+                  data-bs-toggle="modal"
+                  data-bs-target="#admin-product"
+                >
+                  {" "}
+                  <i
+                    className="icofont-plus-circle me-2 fs-6"
                     data-bs-toggle="modal"
-                    data-bs-target="#admin-product"
+                    data-bs-target="#expadd"
                   >
                     {" "}
-                    <i
-                      className="icofont-plus-circle me-2 fs-6"
-                      data-bs-toggle="modal"
-                      data-bs-target="#expadd"
-                    >
-                      {" "}
-                    </i>{" "}
-                    Upload Csv
-                  </button>
-                </div>
+                  </i>{" "}
+                  Upload Csv
+                </button>
               </div>
             </div>
+          </div>
+          {products.length ? (
             <div className="row g-3 mb-3">
               <div className="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
                 <div className="sticky-lg-top">
@@ -250,20 +250,19 @@ const ProductAdmin = () => {
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      ) : (
-        <div className="row clearfix g-3">
-          <div className="col-sm-12">
-            <div className="card mb-3">
-              <div className="card-body">
-                <h3 style={{ textAlign: "center" }}> No Products </h3>
+          ) : (
+            <div className="row clearfix g-3">
+              <div className="col-sm-12">
+                <div className="card mb-3">
+                  <div className="card-body">
+                    <h3 style={{ textAlign: "center" }}> No Products </h3>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
-
+      </div>
       <AddAdminProductModal />
     </>
   );

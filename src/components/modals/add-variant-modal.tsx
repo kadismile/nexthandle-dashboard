@@ -16,27 +16,36 @@ const ProductVariantModal = () => {
     errors: formFields,
   });
 
-  const downloadSampleCsv = async () => {
-    let data = [
-      {
-        name: "Samsung A20",
-        categoryId: "xe5pkAuvmtXYE5zXmQ6cqYMsi",
-      },
-    ];
+  const downloadCsv = async (csvErrors: any) => {
+    let data;
+    if (csvErrors && csvErrors.type === "click") {
+      data = [
+        {
+          name: "Samsung A20",
+          categoryId: "xe5pkAuvmtXYE5zXmQ6cqYMsi",
+          color: "blue, red, green",
+          ram: "12GB, 5GB",
+        },
+      ];
+    } else {
+      data = csvErrors;
+    }
     const options = {
       fieldSeparator: ",",
       quoteStrings: '"',
       decimalSeparator: ".",
       showLabels: true,
       showTitle: false,
-      title: "Product Variant Sample",
+      title: csvErrors ? "Error In Csv Uploaded" : "Product Variant Sample",
       useTextFile: false,
       useBom: true,
-      filename: "Variant CSV",
+      filename: csvErrors?.type ? "Variant CSV" : "Error_Variant ",
       useKeysAsHeaders: true,
     };
     const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv(data);
+    if (data) {
+      csvExporter.generateCsv(data);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,16 +74,21 @@ const ProductVariantModal = () => {
     });
     let formData = new FormData();
     formData.append("myImage", file[0]);
-    console.log("file -----> ", file);
-    let data: any = await ProductService.uploadVariantCsv(formData);
-    const { status, error } = data;
-    if (error) {
-      toastr.error("Error uploading csv file");
+    let csvResponse: any = await ProductService.uploadVariantCsv(formData);
+    const { status, error, data } = csvResponse;
+
+    if (status === "failed") {
+      toastr.error("Error uploading some values in csv file");
+      await downloadCsv(data);
     }
     if (status === "success") {
       toastr.success("variants uploaded successfully");
       dispatch(setCategories(true));
     }
+    if (error) {
+      toastr.error("Error uploading csv file");
+    }
+    setLoading(false);
   };
 
   const { errors } = formValues;
@@ -105,7 +119,7 @@ const ProductVariantModal = () => {
                 <div className="form-row">
                   <p>
                     Kindly click{" "}
-                    <a href="/#" onClick={downloadSampleCsv}>
+                    <a href="/#" onClick={downloadCsv}>
                       {" "}
                       <span style={{ color: "blue" }}>here</span>
                     </a>{" "}
