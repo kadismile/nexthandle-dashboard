@@ -1,61 +1,66 @@
-import React, {useState} from "react";
-import toastr from 'toastr'
+import React, { useState } from "react";
+import toastr from "toastr";
 import { useSelector } from "react-redux";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
-import UserService from '../../services/user'
-import {DisabledButton} from "../../components/libs";
-import {selectUser, setUser, setToken} from "../../redux/userSlice";
+import UserService from "../../services/user";
+import { DisabledButton } from "../../components/libs";
+import { selectUser, setUser, setToken } from "../../redux/userSlice";
 
-
-function LoginToken({email}: any) {
+function LoginToken({ email }: any) {
   const dispatch = useDispatch();
   const formFields = {
-    loginToken: ""
+    loginToken: "",
   };
   const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState({ ...formFields, errors: formFields });
+  const [formValues, setFormValues] = useState({
+    ...formFields,
+    errors: formFields,
+  });
   const [submitForm, setSubmitForm] = useState(false);
   const disableForm = () => {
     let newValues = { ...formValues };
     let isError = false;
     for (let val of Object.values(newValues)) {
       if (val === "") {
-        isError = true
+        isError = true;
       }
     }
     if (isError && submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return true
+      return true;
     }
     if (isError && !submitForm) {
-      return true
+      return true;
     }
     if (!isError && !submitForm) {
-      return false
+      return false;
     }
   };
-  const handleChange = (event: { preventDefault: () => void; target: { name: any; value: any; }; }) => {
+  const handleChange = (event: {
+    preventDefault: () => void;
+    target: { name: any; value: any };
+  }) => {
     event.preventDefault();
     let { name, value } = event.target;
     let errors = formValues.errors;
     validateForm(name, errors, value);
-    setFormValues(prevState => {
+    setFormValues((prevState) => {
       return {
         ...prevState,
         errors,
         [name]: value,
-      }
+      };
     });
     for (let val of Object.values(formValues.errors)) {
       if (val !== "") {
-        setSubmitForm(false)
+        setSubmitForm(false);
       }
     }
   };
-  const validateForm = (name:any, errors:any, value:any) => {
+  const validateForm = (name: any, errors: any, value: any) => {
     switch (name) {
       case "loginToken":
         errors.loginToken = "";
@@ -71,24 +76,23 @@ function LoginToken({email}: any) {
         break;
     }
   };
-  const  handleSubmit =  async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     setLoading(true);
-    const {loginToken} = formValues;
-    let response:any = await UserService.verifyToken(email, loginToken);
-    if (response.status === 'failed') {
-      toastr.error('invalid token provided');
+    const { loginToken } = formValues;
+    let response: any = await UserService.verifyToken(email, loginToken);
+    if (response.status === "failed") {
+      toastr.error("invalid token provided");
       setLoading(false);
     } else {
       dispatch(setUser(response.user));
       dispatch(setToken(response.token));
       setLoading(false);
-      window.location.replace("/")
+      window.location.replace("/");
     }
   };
   const displayError = (error: string) => {
-    if (error.length)
-      return <span className="addUser__error">{error}</span>
+    if (error.length) return <span className="addUser__error">{error}</span>;
   };
   const { errors } = formValues;
   return (
@@ -96,9 +100,11 @@ function LoginToken({email}: any) {
       <div className="body d-flex p-0 p-xl-5">
         <div className="container-xxl">
           <div className="row g-0">
-
             <div className="col-lg-12 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100">
-              <div className="w-100 p-3 p-md-5 card border-0 shadow-sm" style={{maxWidth: '32rem'}}>
+              <div
+                className="w-100 p-3 p-md-5 card border-0 shadow-sm"
+                style={{ maxWidth: "32rem" }}
+              >
                 <form className="row g-1 p-3 p-md-4">
                   <div className="col-12 text-center mb-5">
                     <h1>Login Token</h1>
@@ -115,21 +121,24 @@ function LoginToken({email}: any) {
                         onChange={handleChange}
                         value={formValues.loginToken}
                       />
-                      { displayError(errors.loginToken) }
+                      {displayError(errors.loginToken)}
                     </div>
                   </div>
 
                   <div className="col-12 text-center mt-4">
-                    {disableForm() ?
-                      <DisabledButton /> :
+                    {disableForm() ? (
+                      <DisabledButton />
+                    ) : (
                       <button
                         type="button"
                         className="btn btn-primary btn-large waves-effect waves-light"
-                        style={{width: "200px", fontSize: "16px"}}
+                        style={{ width: "200px", fontSize: "16px" }}
                         onClick={handleSubmit}
-                      > SUBMIT
+                      >
+                        {" "}
+                        SUBMIT
                       </button>
-                    }
+                    )}
                   </div>
                 </form>
               </div>
@@ -138,7 +147,7 @@ function LoginToken({email}: any) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export {LoginToken}
+export { LoginToken };

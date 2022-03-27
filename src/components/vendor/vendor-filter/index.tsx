@@ -1,7 +1,6 @@
 import React from "react";
 import DateFilter from "../../product/product-filter/DateFilter";
-import VendorCategoryFilter from "./VendorCatefory";
-
+import VendorCategoryFilter from "./VendorCategory";
 
 const VendorFilter = () => {
   return (
@@ -13,15 +12,17 @@ const VendorFilter = () => {
               <h4 className="title">Filter</h4>
             </div>
             <div className="filter-btn">
-              <a className="btn btn-primary" href="#">Reset</a>
+              <a className="btn btn-primary" href="/#">
+                Reset
+              </a>
             </div>
           </div>
         </div>
-        <VendorCategoryFilter/>
-        <DateFilter/>
+        <VendorCategoryFilter />
+        <DateFilter />
       </div>
     </div>
-  )
+  );
 };
 
-export default VendorFilter
+export default VendorFilter;

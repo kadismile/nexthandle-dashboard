@@ -1,7 +1,6 @@
 import React from "react";
-import CategoryFilter from "./category-filter";
+// import CategoryFilter from "./category-filter";
 import CategoryActiveFilter from "./category-filter";
-
 
 const ActiveFilter = () => {
   return (
@@ -13,14 +12,16 @@ const ActiveFilter = () => {
               <h4 className="title">Filter</h4>
             </div>
             <div className="filter-btn">
-              <a className="btn btn-primary" href="#">Reset</a>
+              <a className="btn btn-primary" href="/#">
+                Reset
+              </a>
             </div>
           </div>
         </div>
-        <CategoryActiveFilter/>
+        <CategoryActiveFilter />
       </div>
     </div>
-  )
+  );
 };
 
-export default ActiveFilter
+export default ActiveFilter;

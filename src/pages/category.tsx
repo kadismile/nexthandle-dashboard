@@ -1,97 +1,80 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { selectProductBrand } from "../redux/productSlice";
-import ProductServices from "../services/product";
+import { selectCategory } from "../redux/categorySlice";
+import CategoryServices from "../services/category";
 import { PageSpinner } from "../components/libs";
+import CategoryModal from "../components/modals/add-category-modal";
 import toastr from "toastr";
 import AWN from "awesome-notifications";
-import ProductBrandModal from "../components/modals/add-brand-modal";
-import EditBrandModal from "../components/modals/edit-brand-modal";
+import EditCategoryModal from "../components/modals/edit-category-modal";
+import ActiveFilter from "../components/category/category-filter";
 
-const ProductBrand = () => {
-  const storedbrands = useSelector(selectProductBrand);
-  const [brands, setbrands] = useState(storedbrands);
+const Category = () => {
+  const storedCategories = useSelector(selectCategory);
+  const [categories, setCategories] = useState(storedCategories);
   const [loading, setLoading] = useState(true);
-  const [selectedBrand, setSelectedBrand] = useState(undefined);
+  const [selectedCat, setSelectedCat] = useState(undefined);
   let notifier = new AWN();
 
-  const fetchBrands = async () => {
+  const fetchCategories = async () => {
     setLoading(true);
-    let params = "";
-    let brands: any = await ProductServices.getBrands(params);
+    let params = `isActive=true`;
+    let categories: any = await CategoryServices.getCategories(params);
     const {
       data: { data },
-    } = brands;
+    } = categories;
     if (data) {
-      setbrands(data);
+      setCategories(data);
       setLoading(false);
     }
   };
   useEffect(() => {
     (async () => {
-      await fetchBrands();
+      await fetchCategories();
     })();
   }, []);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await fetchBrands();
+      setCategories(storedCategories);
       setTimeout(() => {
         setLoading(false);
       }, 1200);
     })();
-  }, [storedbrands]);
-  // const deleteBrand = async (brandId: any) => {
-  //   let onOk = async () => {
-  //     let brand = await ProductServices.deleteBrands(brandId);
-  //     const { status }: any = brand;
-  //     if (status === "success") {
-  //       setLoading(true);
-  //       toastr.success("product brand deleted successfully");
-  //       await fetchBrands();
-  //     }
-  //   };
-  //   let onCancel = () => {
-  //     return;
-  //   };
-  //   notifier.confirm("Are you sure?", onOk, onCancel, {
-  //     labels: {
-  //       confirm: "Delete Brand?",
-  //     },
-  //   });
-  // };
-  const copyToClipBoard = async (catId: string) => {
-    toastr.success("brand_id copied to clipboard");
-    return await navigator.clipboard.writeText(catId);
-  };
+  }, [storedCategories]);
 
   const handleChange = async (event: {
     preventDefault: () => void;
     target: { name: any; value: any; id: any };
   }) => {
     const { id } = event.target;
-    const brand = brands.find((b: any) => b._id === id);
+    const category = categories.find((c: any) => c._id === id);
     let onOk = async () => {
       event.preventDefault();
       setLoading(true);
       const doc = {
-        brandId: brand._id,
-        isActive: !brand.isActive,
+        categoryId: category._id,
+        isActive: !category.isActive,
       };
-      await ProductServices.updateBrand(doc);
-      await fetchBrands();
+      await CategoryServices.updateCategory(doc);
+      await fetchCategories();
     };
     let onCancel = () => {
       return;
     };
     notifier.confirm("Are you sure?", onOk, onCancel, {
       labels: {
-        confirm: `Update Brand to ${
-          brand.isActive ? "InActive ?" : "Active ?"
+        confirm: `Update Category to ${
+          category.isActive ? "InActive ?" : "Active ?"
         }`,
       },
     });
+  };
+  const copyToClipBoard = async (catId: string) => {
+    toastr.success("cat_id copied to clipboard");
+    return await navigator.clipboard.writeText(catId);
   };
 
   return (
@@ -101,13 +84,13 @@ const ProductBrand = () => {
           <div className="row align-items-center">
             <div className="border-0 mb-4">
               <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                <h3 className="fw-bold mb-0">Product Brand</h3>
+                <h3 className="fw-bold mb-0">Category</h3>
                 <div className="col-auto d-flex w-sm-100">
                   <button
                     type="button"
                     className="btn btn-primary btn-set-task w-sm-100"
                     data-bs-toggle="modal"
-                    data-bs-target="#product-brand"
+                    data-bs-target="#expadd"
                   >
                     {" "}
                     <i
@@ -122,13 +105,13 @@ const ProductBrand = () => {
                 </div>
               </div>
             </div>
-          </div>{" "}
-          {/* Row end  */}
+          </div>
           <div className="row g-3 mb-3">
-            <div className="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+            <ActiveFilter />
+            <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
               {loading ? (
                 <PageSpinner />
-              ) : brands.length ? (
+              ) : categories.length ? (
                 <div className="row clearfix g-3">
                   <div className="col-sm-12">
                     <div className="card mb-3">
@@ -141,18 +124,26 @@ const ProductBrand = () => {
                           <thead>
                             <tr>
                               <th>#</th>
-                              <th>brand id</th>
+                              <th>category id</th>
                               <th>Name</th>
                               <th>Created</th>
                               <th>Actions</th>
+                              <th> </th>
                             </tr>
                           </thead>
                           <tbody>
-                            {brands.map((brand: any, index: number) => {
+                            {categories.map((cat: any, index: number) => {
                               return (
-                                <tr key={brand._id}>
+                                <tr
+                                  key={cat._id}
+                                  style={{
+                                    backgroundColor: !cat.isActive
+                                      ? "#f5eacb"
+                                      : "",
+                                  }}
+                                >
                                   <td>
-                                    <strong>#{(index += 1)}</strong>
+                                    <strong>#{index + 1}</strong>
                                   </td>
                                   <td>
                                     <a
@@ -161,22 +152,22 @@ const ProductBrand = () => {
                                       data-bs-placement="top"
                                       title="copy to clipboard"
                                       style={{ marginRight: "15px" }}
-                                      onClick={() => copyToClipBoard(brand._id)}
+                                      onClick={() => copyToClipBoard(cat._id)}
                                     >
                                       <i className="icofont-copy"> </i>
                                     </a>
-                                    <strong>{brand._id}</strong>
+                                    <strong>{cat._id}</strong>
                                   </td>
                                   <td>
                                     <a href="customer-detail.html">
                                       <i className="icofont-chart-flow fs-5" />
                                       <span className="fw-bold ms-1">
-                                        {brand.name}
+                                        {cat.name}
                                       </span>
                                     </a>
                                   </td>
                                   <td>
-                                    {moment(brand.createdAt).format(
+                                    {moment(cat.createdAt).format(
                                       "do MMM, YYYY"
                                     )}
                                   </td>
@@ -185,9 +176,9 @@ const ProductBrand = () => {
                                       <input
                                         className="form-check-input"
                                         type="checkbox"
-                                        id={brand._id}
+                                        id={cat._id}
                                         onChange={handleChange}
-                                        checked={brand.isActive}
+                                        checked={cat.isActive}
                                       />
                                       <label
                                         className="form-check-label"
@@ -202,9 +193,9 @@ const ProductBrand = () => {
                                       type="button"
                                       className="btn btn-outline-secondary"
                                       style={{ marginTop: "18px" }}
-                                      onClick={() => setSelectedBrand(brand)}
+                                      onClick={() => setSelectedCat(cat)}
                                       data-bs-toggle="modal"
-                                      data-bs-target="#edit-brand"
+                                      data-bs-target="#edit-category"
                                     >
                                       <i className="icofont-edit text-success" />
                                     </button>
@@ -223,7 +214,7 @@ const ProductBrand = () => {
                   <div className="col-sm-12">
                     <div className="card mb-3">
                       <div className="card-body">
-                        <h3 style={{ textAlign: "center" }}> No Vendors </h3>
+                        <h3 style={{ textAlign: "center" }}> No Categories </h3>
                       </div>
                     </div>
                   </div>
@@ -233,10 +224,11 @@ const ProductBrand = () => {
           </div>
         </div>
       </div>
-      <ProductBrandModal />
-      <EditBrandModal brand={selectedBrand} />
+
+      <CategoryModal />
+      <EditCategoryModal category={selectedCat} />
     </>
   );
 };
 
-export default ProductBrand;
+export default Category;

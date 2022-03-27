@@ -1,6 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from 'react-redux'
-import {setProducts, setIsActive, selectProductIsActive} from "../../../redux/productSlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setProducts,
+  setIsActive,
+  selectProductIsActive,
+} from "../../../redux/productSlice";
 import ProductSrvice from "../../../services/product";
 
 const ProductActiveFilter = () => {
@@ -8,25 +12,35 @@ const ProductActiveFilter = () => {
   const storedActive = useSelector(selectProductIsActive);
   const [active, setActive] = useState(storedActive);
 
-  useEffect( ()=> {
-    ( async ()=> {
+  useEffect(() => {
+    (async () => {
       let params = `isActive=${active}`;
-      let vendors:any = await ProductSrvice.getProducts(params);
-      const {data: {data}} = vendors;
-      dispatch(setProducts(data))
-    })()
-  },[active]);
+      let vendors: any = await ProductSrvice.getProducts(params);
+      const {
+        data: { data },
+      } = vendors;
+      dispatch(setProducts(data));
+    })();
+  }, [active, dispatch]);
 
   const handleChange = async () => {
-    dispatch(setIsActive({isActive: !active}));
-    setActive(!active)
+    dispatch(setIsActive({ isActive: !active }));
+    setActive(!active);
   };
 
   return (
     <div className="card mb-3">
       <div className="categories">
         <div className="filter-title">
-          <a className="title" data-bs-toggle="collapse" href="#active" role="button" aria-expanded="true">Active</a>
+          <a
+            className="title"
+            data-bs-toggle="collapse"
+            href="#active"
+            role="button"
+            aria-expanded="true"
+          >
+            Active
+          </a>
         </div>
         <div className="collapse show" id="active">
           <div className="filter-category">
@@ -41,7 +55,10 @@ const ProductActiveFilter = () => {
                     checked={active}
                     onChange={handleChange}
                   />
-                  <label className="form-check-label" htmlFor="flexCheckDefault1">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault1"
+                  >
                     Active
                   </label>
                 </div>
@@ -51,6 +68,6 @@ const ProductActiveFilter = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
-export default ProductActiveFilter
+export default ProductActiveFilter;
