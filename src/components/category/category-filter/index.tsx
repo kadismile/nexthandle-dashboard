@@ -12,7 +12,7 @@ const ActiveFilter = () => {
               <h4 className="title">Filter</h4>
             </div>
             <div className="filter-btn">
-              <a className="btn btn-primary" href="/#">
+              <a className="btn btn-primary" href="#/">
                 Reset
               </a>
             </div>

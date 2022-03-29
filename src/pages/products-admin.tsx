@@ -109,7 +109,7 @@ const ProductAdmin = () => {
                         <h4 className="title">Filter</h4>
                       </div>
                       <div className="filter-btn">
-                        <a className="btn btn-primary" href="/#">
+                        <a className="btn btn-primary" href="#/">
                           Reset
                         </a>
                       </div>
@@ -127,100 +127,103 @@ const ProductAdmin = () => {
                     <div className="card mb-3 bg-transparent p-2">
                       {products.map((product: any) => {
                         return (
-                          <div
-                            className="card border-0 mb-1"
-                            key={product?._id}
-                          >
-                            <div className="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id={product._id}
-                                onChange={handleChange}
-                                checked={product.isActive}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="Eaten-switch1"
-                              >
-                                {" "}
-                              </label>
-                            </div>
+                          <>
+                            <div
+                              className="card border-0 mb-1"
+                              key={product?._id}
+                            >
+                              <div className="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id={product._id}
+                                  onChange={handleChange}
+                                  checked={product.isActive}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="Eaten-switch1"
+                                >
+                                  {" "}
+                                </label>
+                              </div>
 
-                            <div className="card-body d-flex align-items-center flex-column flex-md-row">
-                              <div className="ms-md-4 m-0 mt-4 mt-md-0 text-md-start text-center w-100">
-                                <a href="product-detail.html">
-                                  <h6 className="mb-3 fw-bold">
-                                    {product?.name}
-                                    <span className="text-muted small fw-light d-block">
-                                      {product?.category?.name}
-                                    </span>
-                                  </h6>
-                                </a>
-                                <div className="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
-                                  <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
-                                    <div className="text-muted small">
-                                      Date Added
-                                    </div>
-                                    <strong>
-                                      {moment(product?.createdAt).format(
-                                        "DD-MMM-YYYY"
-                                      )}
-                                    </strong>
-                                  </div>
-                                  <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
-                                    <div className="text-muted small">
-                                      Condition
-                                    </div>
-                                    <strong>{product?.condition}</strong>
-                                  </div>
-                                  <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
-                                    <div className="text-muted small">
-                                      Price
-                                    </div>
-                                    <strong>
-                                      ₦{formatTotal(product?.price)}
-                                    </strong>
-                                  </div>
-                                  <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
-                                    <div className="text-muted small">
-                                      Vendor
-                                    </div>
-                                    <strong>
-                                      {" "}
-                                      <span className="text-muted">
-                                        {toUpperCase(
-                                          product.vendor?.businessName
-                                        )}
+                              <div className="card-body d-flex align-items-center flex-column flex-md-row">
+                                <div className="ms-md-4 m-0 mt-4 mt-md-0 text-md-start text-center w-100">
+                                  <a href="product-detail.html">
+                                    <h6 className="mb-3 fw-bold">
+                                      {product?.name}
+                                      <span className="text-muted small fw-light d-block">
+                                        {product?.category?.name}
                                       </span>
-                                    </strong>
+                                    </h6>
+                                  </a>
+                                  <div className="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
+                                    <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
+                                      <div className="text-muted small">
+                                        Date Added
+                                      </div>
+                                      <strong>
+                                        {moment(product?.createdAt).format(
+                                          "DD-MMM-YYYY"
+                                        )}
+                                      </strong>
+                                    </div>
+                                    <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
+                                      <div className="text-muted small">
+                                        Condition
+                                      </div>
+                                      <strong>{product?.condition}</strong>
+                                    </div>
+                                    <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
+                                      <div className="text-muted small">
+                                        Price
+                                      </div>
+                                      <strong>
+                                        ₦{formatTotal(product?.price)}
+                                      </strong>
+                                    </div>
+                                    <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
+                                      <div className="text-muted small">
+                                        Vendor
+                                      </div>
+                                      <strong>
+                                        {" "}
+                                        <span className="text-muted">
+                                          {toUpperCase(
+                                            product.vendor?.businessName
+                                          )}
+                                        </span>
+                                      </strong>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2 d-inline-flex d-md-none">
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary"
-                                  >
-                                    Add Cart
-                                  </button>
+                                  <div className="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2 d-inline-flex d-md-none">
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary"
+                                    >
+                                      Add Cart
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </>
                         );
                       })}
                     </div>
+
                     <div className="row g-3 mb-3">
                       <div className="col-md-12">
                         <nav className="justify-content-end d-flex">
                           <ul className="pagination">
                             <li className="page-item disabled">
-                              <a className="page-link" href="/#" tabIndex={-1}>
+                              <a className="page-link" href="#/" tabIndex={-1}>
                                 Previous
                               </a>
                             </li>
                             <li className="page-item">
-                              <a className="page-link" href="/#">
+                              <a className="page-link" href="#/">
                                 1
                               </a>
                             </li>
@@ -228,17 +231,17 @@ const ProductAdmin = () => {
                               className="page-item active"
                               aria-current="page"
                             >
-                              <a className="page-link" href="/#">
+                              <a className="page-link" href="#/">
                                 2
                               </a>
                             </li>
                             <li className="page-item">
-                              <a className="page-link" href="/#">
+                              <a className="page-link" href="#/">
                                 3
                               </a>
                             </li>
                             <li className="page-item">
-                              <a className="page-link" href="/#">
+                              <a className="page-link" href="#/">
                                 Next
                               </a>
                             </li>
