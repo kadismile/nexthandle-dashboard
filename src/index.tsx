@@ -6,16 +6,19 @@ import App from "./App";
 import { store, persistor } from "./redux/store";
 import { BrowserRouter } from "react-router-dom";
 import "toastr/build/toastr.min.css";
+import { AppContextProvider } from "./globals/AppContext";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <PersistGate persistor={persistor}>
-          <App />
-        </PersistGate>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+ <React.StrictMode>
+  <Provider store={store}>
+   <BrowserRouter>
+    <PersistGate persistor={persistor}>
+     <AppContextProvider>
+      <App />
+     </AppContextProvider>
+    </PersistGate>
+   </BrowserRouter>
+  </Provider>
+ </React.StrictMode>,
+ document.getElementById("root")
 );
