@@ -5,27 +5,27 @@ import { Login } from "./pages/auth/login";
 import { NotFound } from "./components/404";
 
 function UnauthenticatedApp() {
-  return (
-    <>
-      <UnAuthenticatedRoutes />
-    </>
-  );
+ return (
+  <>
+   <UnAuthenticatedRoutes />
+  </>
+ );
 }
 
 function UnAuthenticatedRoutes() {
-  const { pathname } = window.location;
-  const uri = pathname.split("/")[1];
+ const { pathname } = window.location;
+ const uri = pathname.split("/")[1];
 
-  if (uri === "reset-password-token") {
-    return <ResetPasswordRoute />;
-  } else {
-    return (
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="*" element={<Login />} />
-      </Routes>
-    );
-  }
+ if (uri === "reset-password-token") {
+  return <ResetPasswordRoute />;
+ } else {
+  return (
+   <Routes>
+    <Route path="/" element={<Login />} />
+    <Route path="*" element={<NotFound />} />
+   </Routes>
+  );
+ }
 }
 
 /*interface Item {
@@ -38,29 +38,29 @@ interface ChildComponentProps {
 }*/
 
 function ResetPasswordRoute() {
-  /*const { href } = window.location;
+ /*const { href } = window.location;
   const token = href
     .substr(href.search("reset-password-token"))
     .split("token=")[0]
     .split("reset-password-token/")[1];*/
 
-  return (
-    <Routes>
-      <Route path="/">
-        {" "}
-        <Login />{" "}
-      </Route>
-      {/*<Route path="/reset-password-token"> <ResetPassword  resetPasswordToken={token}/> </Route>*/}
-      <Route path="/login">
-        {" "}
-        <Login />{" "}
-      </Route>
-      <Route path="*">
-        {" "}
-        <NotFound />{" "}
-      </Route>
-    </Routes>
-  );
+ return (
+  <Routes>
+   <Route path="/">
+    {" "}
+    <Login />{" "}
+   </Route>
+   {/*<Route path="/reset-password-token"> <ResetPassword  resetPasswordToken={token}/> </Route>*/}
+   <Route path="/login">
+    {" "}
+    <Login />{" "}
+   </Route>
+   <Route path="*">
+    {" "}
+    <NotFound />{" "}
+   </Route>
+  </Routes>
+ );
 }
 
 export default UnauthenticatedApp;

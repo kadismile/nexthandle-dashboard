@@ -4,6 +4,7 @@ import { setProducts } from "../../../redux/productSlice";
 import VendorService from "../../../services/vendor";
 import ProductService from "../../../services/product";
 import _ from "lodash";
+import { setSingleVendor } from "../../../redux/vendorSlice";
 
 const VendorFilter = () => {
  const dispatch = useDispatch();
@@ -11,7 +12,7 @@ const VendorFilter = () => {
  const [search, setSearch]: any = useState("");
  const [checkedState, setCheckedState]: any = useState([]);
  const [vendorIds, setVendorIds]: any = useState();
-
+ const [vendorSearch, setVendorSearch] = useState("");
  const fetchVendors = async () => {
   let params = `isActive=true`;
   let vendors: any = await VendorService.getVendors(params);
@@ -65,6 +66,7 @@ const VendorFilter = () => {
  }) => {
   e.preventDefault();
   const searchParam = e.target.value;
+  setVendorSearch(searchParam);
   setSearch(searchParam);
   if (searchParam.length > 3) {
    const textSearch = _.debounce(async () => {
@@ -77,6 +79,18 @@ const VendorFilter = () => {
    await fetchVendors();
   }
  };
+
+ const handleVendorChange = (vendor: any) => {
+  dispatch(setSingleVendor(vendor));
+ };
+
+ const getFilteredVendors = (arr: any[], query: string): any[] => {
+  return arr?.filter((vendor) =>
+   vendor.businessName.toLowerCase().includes(query.toLowerCase())
+  );
+ };
+
+ const filteredVendors = getFilteredVendors(vendors, vendorSearch);
 
  return (
   <div className="card mb-3">
@@ -109,21 +123,24 @@ const VendorFilter = () => {
      </div>
      <div className="filter-category">
       <ul className="category-list">
-       {vendors?.map(({ businessName, _id }: any, index: number) => (
-        <li key={_id}>
+       {filteredVendors?.map((vendor: any, index: number) => (
+        <li key={vendor._id} onClick={() => handleVendorChange(vendor)}>
          <div className="form-check">
-          <label className="form-check-label" htmlFor={`vendorCheck${_id}`}>
+          <label
+           className="form-check-label"
+           htmlFor={`vendorCheck${vendor._id}`}
+          >
            <span style={{ fontSize: "14px" }}>
-            {businessName.toUpperCase()}
+            {vendor.businessName.toUpperCase()}
            </span>
           </label>
           <input
            className="form-check-input"
            type="checkbox"
-           value={businessName}
-           checked={checkedState[_id]}
+           value={vendor.businessName}
+           checked={checkedState[vendor._id]}
            onChange={() => handleChange(index)}
-           id={`vendorCheck${_id}`}
+           id={`vendorCheck${vendor._id}`}
           />
          </div>
         </li>

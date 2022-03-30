@@ -9,17 +9,28 @@ import { useSelector } from "react-redux";
 import Search from "../components/Search";
 import AddProductModal from "../components/modals/add-category-modal";
 import AWN from "awesome-notifications";
+import { singleCategory } from "../redux/categorySlice";
+import { selectOneVendor } from "../redux/vendorSlice";
 
 const Product = () => {
  const storedProducts = useSelector(selectProduct);
+ const storedCategory = useSelector(singleCategory);
+ const storedVendor = useSelector(selectOneVendor);
  const [products, setProducts] = useState(storedProducts);
  const [loading, setLoading] = useState(true);
  let notifier = new AWN();
 
- const getProducts = async () => {
+ const getProducts = async (
+  category?: string,
+  vendor?: string,
+  isActive?: any
+ ) => {
   setLoading(true);
-  let params = "";
-  let products: any = await ProductService.getProducts(params);
+  const products: any = await ProductService.getProducts(
+   category,
+   vendor,
+   isActive
+  );
   const {
    data: { data },
   } = products;
@@ -30,8 +41,11 @@ const Product = () => {
  };
 
  useEffect(() => {
-  getProducts();
- }, []);
+  getProducts(
+   `${storedCategory._id ? `category=${storedCategory._id}` : ""}`,
+   `${storedVendor._id ? `vendor=${storedVendor._id}` : ""}`
+  );
+ }, [storedCategory, storedVendor]);
 
  useEffect(() => {
   setLoading(true);
@@ -82,7 +96,7 @@ const Product = () => {
      <div className="row g-3 mb-3">
       <ProductFilter />
       <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-       {loading && !products?.length ? (
+       {loading ? (
         <PageSpinner />
        ) : (
         <>

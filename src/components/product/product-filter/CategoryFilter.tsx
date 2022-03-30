@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "../../../globals/AppContext";
+import { useDispatch } from "react-redux";
+import { setCategories, setCategory } from "../../../redux/categorySlice";
 import ProductService from "../../../services/product";
 const CategoryFilter = () => {
  const [categories, setVendor] = useState([]);
  const [searchCat, setSearchCat] = useState("");
+ const dispatch = useDispatch();
 
- const { storeCategory } = useAppContext();
  useEffect(() => {
   (async () => {
    let fetchCategories: any = await ProductService.getCategories();
@@ -14,14 +15,19 @@ const CategoryFilter = () => {
    } = fetchCategories;
    if (data) {
     setVendor(data);
+    dispatch(setCategories(data));
    }
   })();
- }, []);
+ }, [dispatch]);
 
  const getFilteredCategories = (arr: any[], query: string): any[] => {
   return arr?.filter((category) =>
    category.name.toLowerCase().includes(query.toLowerCase())
   );
+ };
+
+ const handleCategoryChange = (cat: any) => {
+  dispatch(setCategory(cat));
  };
  return (
   <div className="card mb-3">
@@ -55,7 +61,7 @@ const CategoryFilter = () => {
      <div className="filter-category">
       <ul className="category-list">
        {getFilteredCategories(categories, searchCat).map((cat: any) => (
-        <li key={cat._id} onClick={() => storeCategory(cat.name.toLowerCase())}>
+        <li key={cat._id} onClick={() => handleCategoryChange(cat)}>
          <div className="form-check">
           <label
            className="form-check-label"
