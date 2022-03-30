@@ -104,7 +104,7 @@ const User = () => {
                                   </td>
                                   <td>
                                     <a
-                                      href="/#"
+                                      href="#/"
                                       data-bs-toggle="tooltip"
                                       data-bs-placement="top"
                                       title="copy to clipboard"
