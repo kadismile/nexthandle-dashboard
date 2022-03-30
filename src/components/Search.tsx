@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 const Search = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [, setSearchResults] = useState([]);
 
   const handleChange = (e: {
     preventDefault: () => void;

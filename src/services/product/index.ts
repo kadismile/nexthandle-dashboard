@@ -12,11 +12,13 @@ class ProductService {
  async getProducts(
   category = "",
   vendor = "",
-  isActive = ""
+  isActive = "",
+  startDate="",
+  endDate=""
  ): Promise<IProduct> {
   try {
    return await client(
-    `${this.serverUrl}/products?${category}&${vendor}&${isActive}`,
+    `${this.serverUrl}/products?${category}&${vendor}&${isActive}&${startDate}&${endDate}`,
     { data: null, type: null, headers: {} }
    );
   } catch (e) {
@@ -24,10 +26,10 @@ class ProductService {
   }
  }
 
- async getAdminProducts(category = "", vendor = ""): Promise<IProduct> {
+ async getAdminProducts(category = "", vendor = "", startDate="", endDate=""): Promise<IProduct> {
   try {
    return await client(
-    `${this.serverUrl}/products/admin?${category}&${vendor}`,
+    `${this.serverUrl}/products/admin?${category}&${vendor}&${startDate}&${endDate}`,
     {
      data: null,
      type: null,
