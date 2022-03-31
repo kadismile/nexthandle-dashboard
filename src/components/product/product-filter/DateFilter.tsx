@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import ProductService from "../../../services/product";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../../redux/productSlice";
-
+import { singleCategory } from "../../../redux/categorySlice";
+import { selectOneVendor } from "../../../redux/vendorSlice";
+import { useLocation } from "react-router";
 const DateFilter = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const storedCategory = useSelector(singleCategory);
+  const storedVendor = useSelector(selectOneVendor);
   const [formValues, setFormValues] = useState({
     from: moment().format("Y-M-D"),
     to: moment().format("Y-M-D"),
@@ -28,15 +33,40 @@ const DateFilter = () => {
     (async () => {
       if (moment(from).isSame(to)) {
       } else {
-        let params = `field=createdAt&gt=${from}&lte=${to}`;
-        let products: any = await ProductService.getProducts(params);
-        const {
-          data: { data },
-        } = products;
-        dispatch(setProducts(data));
+        // let params = `field=createdAt&gt=${from}&lte=${to}`;
+        if (location.pathname.includes("admin")) {
+          const products: any = await ProductService.getAdminProducts(
+            storedCategory._id,
+            storedVendor._id,
+            `gt=${from}`,
+            `lt=${to}`
+          );
+          console.log(products);
+
+          dispatch(setProducts(products?.data?.data));
+        } else {
+          let products: any = await ProductService.getProducts(
+            storedCategory._id,
+            storedVendor._id,
+            "",
+            `gt=${from}`,
+            `lt=${to}`
+          );
+          const {
+            data: { data },
+          } = products;
+          dispatch(setProducts(data));
+        }
       }
     })();
-  }, [from, to, dispatch]);
+  }, [
+    from,
+    to,
+    dispatch,
+    location.pathname,
+    storedCategory._id,
+    storedVendor._id,
+  ]);
 
   return (
     <div className="card mb-3">

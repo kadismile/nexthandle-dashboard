@@ -9,17 +9,28 @@ import { useSelector } from "react-redux";
 import Search from "../components/Search";
 import AddProductModal from "../components/modals/add-category-modal";
 import AWN from "awesome-notifications";
+import { singleCategory } from "../redux/categorySlice";
+import { selectOneVendor } from "../redux/vendorSlice";
 
 const Product = () => {
   const storedProducts = useSelector(selectProduct);
+  const storedCategory = useSelector(singleCategory);
+  const storedVendor = useSelector(selectOneVendor);
   const [products, setProducts] = useState(storedProducts);
   const [loading, setLoading] = useState(true);
   let notifier = new AWN();
 
-  const getProducts = async () => {
+  const getProducts = async (
+    category?: string,
+    vendor?: string,
+    isActive?: any
+  ) => {
     setLoading(true);
-    let params = "";
-    let products: any = await ProductService.getProducts(params);
+    const products: any = await ProductService.getProducts(
+      category,
+      vendor,
+      isActive
+    );
     const {
       data: { data },
     } = products;
@@ -30,10 +41,11 @@ const Product = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      await getProducts();
-    })();
-  }, []);
+    getProducts(
+      `${storedCategory._id ? `category=${storedCategory._id}` : ""}`,
+      `${storedVendor._id ? `vendor=${storedVendor._id}` : ""}`
+    );
+  }, [storedCategory, storedVendor]);
 
   useEffect(() => {
     setLoading(true);
@@ -84,12 +96,12 @@ const Product = () => {
           <div className="row g-3 mb-3">
             <ProductFilter />
             <div className="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-              {loading && !products.length ? (
+              {loading ? (
                 <PageSpinner />
               ) : (
                 <>
                   <div className="card mb-3 bg-transparent p-2">
-                    {products.map((product: any) => {
+                    {products?.map((product: any) => {
                       return (
                         <div className="card border-0 mb-1" key={product._id}>
                           <div className="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
@@ -177,27 +189,27 @@ const Product = () => {
                       <nav className="justify-content-end d-flex">
                         <ul className="pagination">
                           <li className="page-item disabled">
-                            <a className="page-link" href="#/" tabIndex={-1}>
+                            <a className="page-link" href="/#" tabIndex={-1}>
                               Previous
                             </a>
                           </li>
                           <li className="page-item">
-                            <a className="page-link" href="#/">
+                            <a className="page-link" href="/#">
                               1
                             </a>
                           </li>
                           <li className="page-item active" aria-current="page">
-                            <a className="page-link" href="#/">
+                            <a className="page-link" href="/#">
                               2
                             </a>
                           </li>
                           <li className="page-item">
-                            <a className="page-link" href="#/">
+                            <a className="page-link" href="/#">
                               3
                             </a>
                           </li>
                           <li className="page-item">
-                            <a className="page-link" href="#/">
+                            <a className="page-link" href="/#">
                               Next
                             </a>
                           </li>
