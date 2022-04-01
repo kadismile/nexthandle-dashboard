@@ -3,28 +3,36 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { selectProductBrand } from "../redux/productSlice";
 import ProductServices from "../services/product";
-import { PageSpinner } from "../components/libs";
+import {LoadMoreSpinner, PageSpinner} from "../components/libs";
 import toastr from "toastr";
 import AWN from "awesome-notifications";
 import ProductVariantModal from "../components/modals/add-variant-modal";
 import EditBrandModal from "../components/modals/edit-brand-modal";
+//import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const ProductVariant = () => {
   const storeVariants = useSelector(selectProductBrand);
   const [variants, setVariants] = useState(storeVariants);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState(undefined);
+  let [page] = React.useState(1);
+  let [count, setCount] = React.useState(1);
+  let [hasMore] = React.useState(true);
   let notifier = new AWN();
 
   const fetchVariants = async () => {
-    setLoading(true);
-    let params = "";
-    let variants: any = await ProductServices.getVariants(params);
-    const {
-      data: { data },
-    } = variants;
-    if (data) {
-      setVariants(data);
+    let params = `limit=20&page=${count}`;
+    let pVariants: any = await ProductServices.getVariants(params);
+    const { data: { data }} = pVariants;
+    if (data.length) {
+      if (variants.length) {
+        setVariants([...variants, ...pVariants.data.data]);
+      } else {
+        setLoading(true);
+        setVariants(pVariants.data.data);
+      }
+      setCount(count +1)
       setLoading(false);
     }
   };
@@ -42,29 +50,19 @@ const ProductVariant = () => {
       }, 1200);
     })();
   }, [storeVariants]);
-  // const deleteProductVariant = async (variantId: any) => {
-  //   let onOk = async () => {
-  //     let brand = await ProductServices.deleteVariant(variantId);
-  //     const { status }: any = brand;
-  //     if (status === "success") {
-  //       setLoading(true);
-  //       toastr.success("product varaint deleted successfully");
-  //       await fetchVariants();
-  //     }
-  //   };
-  //   let onCancel = () => {
-  //     return;
-  //   };
-  //   notifier.confirm("Are you sure?", onOk, onCancel, {
-  //     labels: {
-  //       confirm: "Delete Brand?",
-  //     },
-  //   });
-  // };
   const copyToClipBoard = async (variantId: string) => {
     toastr.success("variant_id copied to clipboard");
     return await navigator.clipboard.writeText(variantId);
   };
+
+  const fetchMoreItems = async () => {
+    setTimeout(async () => {
+      await fetchVariants()
+      console.log("count =========================> ", count)
+    }, 5000)
+  }
+
+
 
   const handleChange = async (event: {
     preventDefault: () => void;
@@ -129,99 +127,110 @@ const ProductVariant = () => {
               {loading ? (
                 <PageSpinner />
               ) : variants.length ? (
-                <div className="row clearfix g-3">
-                  <div className="col-sm-12">
-                    <div className="card mb-3">
-                      <div className="card-body">
-                        <table
-                          id="myProjectTable"
-                          className="table table-hover align-middle mb-0"
-                          style={{ width: "100%" }}
-                        >
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>variant id</th>
-                              <th>Name</th>
-                              <th>Created</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {variants.map((variant: any, index: number) => {
-                              return (
-                                <tr key={variant._id}>
-                                  <td>
-                                    <strong>#{(index += 1)}</strong>
-                                  </td>
-                                  <td>
-                                    <a
-                                      href="/#"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      title="copy to clipboard"
-                                      style={{ marginRight: "15px" }}
-                                      onClick={() =>
-                                        copyToClipBoard(variant._id)
-                                      }
-                                    >
-                                      <i className="icofont-copy"> </i>
-                                    </a>
-                                    <strong>{variant._id}</strong>
-                                  </td>
-                                  <td>
-                                    <a href="customer-detail.html">
-                                      <i className="icofont-chart-flow fs-5" />
-                                      <span className="fw-bold ms-1">
-                                        {variant.name}
-                                      </span>
-                                    </a>
-                                  </td>
-                                  <td>
-                                    {moment(variant.createdAt).format(
-                                      "do MMM, YYYY"
-                                    )}
-                                  </td>
-                                  <td>
-                                    <div className="form-check form-switch position-absolute">
-                                      <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id={variant._id}
-                                        onChange={handleChange}
-                                        checked={variant.isActive}
-                                      />
-                                      <label
-                                        className="form-check-label"
-                                        htmlFor="Eaten-switch1"
-                                      >
-                                        {" "}
-                                      </label>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-outline-secondary"
-                                      style={{ marginTop: "18px" }}
-                                      onClick={() =>
-                                        setSelectedVariant(variant)
-                                      }
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#edit-brand"
-                                    >
-                                      <i className="icofont-edit text-success" />
-                                    </button>
-                                  </td>
+                    <div className="row clearfix g-3">
+                      <div className="col-sm-12">
+                        <div className="card mb-3">
+                          <div className="card-body">
+                            <InfiniteScroll
+                                pageStart={page}
+                                loadMore={fetchMoreItems}
+                                hasMore={hasMore}
+                                loader={
+                                  <LoadMoreSpinner/>
+                                }
+                                useWindow={false}
+                            >
+                               <table
+                              id="myProjectTable"
+                              className="table table-hover align-middle mb-0"
+                              style={{ width: "100%" }}
+                            >
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>variant id</th>
+                                  <th>Name</th>
+                                  <th>Created</th>
+                                  <th>Actions</th>
                                 </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
+                              </thead>
+                              <tbody>
+                                {variants.map((variant: any, index: number) => {
+                                  return (
+                                    <tr key={variant._id}>
+                                      <td>
+                                        <strong>#{(index += 1)}</strong>
+                                      </td>
+                                      <td>
+                                        <a
+                                          href="/#"
+                                          data-bs-toggle="tooltip"
+                                          data-bs-placement="top"
+                                          title="copy to clipboard"
+                                          style={{ marginRight: "15px" }}
+                                          onClick={() =>
+                                            copyToClipBoard(variant._id)
+                                          }
+                                        >
+                                          <i className="icofont-copy"> </i>
+                                        </a>
+                                        <strong>{variant._id}</strong>
+                                      </td>
+                                      <td>
+                                        <a href="customer-detail.html">
+                                          <i className="icofont-chart-flow fs-5" />
+                                          <span className="fw-bold ms-1">
+                                            {variant.name}
+                                          </span>
+                                        </a>
+                                      </td>
+                                      <td>
+                                        {moment(variant.createdAt).format(
+                                          "do MMM, YYYY"
+                                        )}
+                                      </td>
+                                      <td>
+                                        <div className="form-check form-switch position-absolute">
+                                          <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id={variant._id}
+                                            onChange={handleChange}
+                                            checked={variant.isActive}
+                                          />
+                                          <label
+                                            className="form-check-label"
+                                            htmlFor="Eaten-switch1"
+                                          >
+                                            {" "}
+                                          </label>
+                                        </div>
+                                      </td>
+                                      <td>
+                                        <button
+                                          type="button"
+                                          className="btn btn-outline-secondary"
+                                          style={{ marginTop: "18px" }}
+                                          onClick={() =>
+                                            setSelectedVariant(variant)
+                                          }
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#edit-brand"
+                                        >
+                                          <i className="icofont-edit text-success" />
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                            </InfiniteScroll>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+
               ) : (
                 <div className="row clearfix g-3">
                   <div className="col-sm-12">

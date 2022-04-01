@@ -44,3 +44,11 @@ export function PageSpinner () {
     </div>
   )
 }
+
+export function LoadMoreSpinner () {
+    return (
+        <div className="spinner-border" style={{ marginLeft: '50%', marginTop: '10px' }} role="status">
+            <span className="visually-hidden">Loading...</span>
+        </div>
+    )
+}
