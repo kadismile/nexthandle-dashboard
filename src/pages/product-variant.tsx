@@ -1,66 +1,66 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
-import { useSelector } from "react-redux";
-import { selectProductBrand } from "../redux/productSlice";
 import ProductServices from "../services/product";
-import { PageSpinner } from "../components/libs";
+import { LoadMoreSpinner, PageSpinner } from "../components/libs";
 import toastr from "toastr";
 import AWN from "awesome-notifications";
 import ProductVariantModal from "../components/modals/add-variant-modal";
 import EditBrandModal from "../components/modals/edit-brand-modal";
 
 const ProductVariant = () => {
-  const storeVariants = useSelector(selectProductBrand);
-  const [variants, setVariants] = useState(storeVariants);
   const [loading, setLoading] = useState(true);
+  const [variants, setVariants] = useState([]);
   const [selectedVariant, setSelectedVariant] = useState(undefined);
+  const [pageNum, setPageNum] = useState(1);
+  const [lastPage, setLastPage] = useState(false)
+  const [lastElement, setLastElement] = useState(null);
   let notifier = new AWN();
 
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        setPageNum((no) => no + 1);
+      }
+    })
+  );
+
   const fetchVariants = async () => {
-    setLoading(true);
-    let params = "";
-    let variants: any = await ProductServices.getVariants(params);
-    const {
-      data: { data },
-    } = variants;
-    if (data) {
-      setVariants(data);
-      setLoading(false);
+    let params = `limit=20&page=${pageNum}`;
+    let response: any = await ProductServices.getVariants(params);
+    if (!response.data.pagination.next) {
+      setLastPage(true)
     }
+    setLoading(true);
+    let all:any = new Set([...variants, ...response.data.data]);
+    // @ts-ignore
+    setVariants([...all]);
+    setLoading(false);
   };
+
   useEffect(() => {
     (async () => {
-      await fetchVariants();
+      if (!lastPage) {
+        await fetchVariants();
+      }
     })();
-  }, []);
+  }, [pageNum]);
+
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      await fetchVariants();
-      setTimeout(() => {
-        setLoading(false);
-      }, 1200);
-    })();
-  }, [storeVariants]);
-  // const deleteProductVariant = async (variantId: any) => {
-  //   let onOk = async () => {
-  //     let brand = await ProductServices.deleteVariant(variantId);
-  //     const { status }: any = brand;
-  //     if (status === "success") {
-  //       setLoading(true);
-  //       toastr.success("product varaint deleted successfully");
-  //       await fetchVariants();
-  //     }
-  //   };
-  //   let onCancel = () => {
-  //     return;
-  //   };
-  //   notifier.confirm("Are you sure?", onOk, onCancel, {
-  //     labels: {
-  //       confirm: "Delete Brand?",
-  //     },
-  //   });
-  // };
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+
+    if (currentElement) {
+      currentObserver.observe(currentElement);
+    }
+
+    return () => {
+      if (currentElement) {
+        currentObserver.unobserve(currentElement);
+      }
+    };
+  }, [lastElement]);
+
   const copyToClipBoard = async (variantId: string) => {
     toastr.success("variant_id copied to clipboard");
     return await navigator.clipboard.writeText(variantId);
@@ -71,7 +71,7 @@ const ProductVariant = () => {
     target: { name: any; value: any; id: any };
   }) => {
     const { id } = event.target;
-    const pVariant = variants.find((b: any) => b._id === id);
+    const pVariant:any = variants.find((b: any) => b._id === id);
     let onOk = async () => {
       event.preventDefault();
       setLoading(true);
@@ -126,19 +126,20 @@ const ProductVariant = () => {
           {/* Row end  */}
           <div className="row g-3 mb-3">
             <div className="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
-              {loading ? (
-                <PageSpinner />
-              ) : variants.length ? (
-                <div className="row clearfix g-3">
-                  <div className="col-sm-12">
-                    <div className="card mb-3">
-                      <div className="card-body">
-                        <table
-                          id="myProjectTable"
-                          className="table table-hover align-middle mb-0"
-                          style={{ width: "100%" }}
-                        >
-                          <thead>
+              {
+                loading ? (
+                  <PageSpinner />
+                ) : variants.length ? (
+                  <div className="row clearfix g-3">
+                    <div className="col-sm-12">
+                      <div className="card mb-3">
+                        <div className="card-body">
+                          <table
+                            id="myProjectTable"
+                            className="table table-hover align-middle mb-0"
+                            style={{ width: "100%" }}
+                          >
+                            <thead>
                             <tr>
                               <th>#</th>
                               <th>variant id</th>
@@ -146,11 +147,15 @@ const ProductVariant = () => {
                               <th>Created</th>
                               <th>Actions</th>
                             </tr>
-                          </thead>
-                          <tbody>
+                            </thead>
+                            <tbody>
                             {variants.map((variant: any, index: number) => {
                               return (
-                                <tr key={variant._id}>
+                                <tr
+                                  key={variant._id}
+                                  // @ts-ignore
+                                  ref={setLastElement}
+                                >
                                   <td>
                                     <strong>#{(index += 1)}</strong>
                                   </td>
@@ -173,8 +178,8 @@ const ProductVariant = () => {
                                     <a href="customer-detail.html">
                                       <i className="icofont-chart-flow fs-5" />
                                       <span className="fw-bold ms-1">
-                                        {variant.name}
-                                      </span>
+                                            {variant.name}
+                                          </span>
                                     </a>
                                   </td>
                                   <td>
@@ -216,26 +221,27 @@ const ProductVariant = () => {
                                 </tr>
                               );
                             })}
-                          </tbody>
-                        </table>
+                            </tbody>
+                          </table>
+                          { !lastPage && <LoadMoreSpinner /> }
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="row clearfix g-3">
-                  <div className="col-sm-12">
-                    <div className="card mb-3">
-                      <div className="card-body">
-                        <h3 style={{ textAlign: "center" }}>
-                          {" "}
-                          No Product Variant{" "}
-                        </h3>
+                ) : (
+                  <div className="row clearfix g-3">
+                    <div className="col-sm-12">
+                      <div className="card mb-3">
+                        <div className="card-body">
+                          <h3 style={{ textAlign: "center" }}>
+                            {" "}
+                            No Product Variant{" "}
+                          </h3>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
         </div>

@@ -197,7 +197,7 @@ function Login() {
                           className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
-                        ></span>
+                        > </span>
                         <span className="sr-only">Loading...</span>
                       </button>
                     )}
