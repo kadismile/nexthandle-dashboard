@@ -7,12 +7,14 @@ import Search from "../components/Search";
 import { useSelector } from "react-redux";
 import { selectVendor } from "../redux/vendorSlice";
 import toastr from "toastr";
+import EditBrandModal from "../components/modals/edit-brand-modal";
+import VendorDetailsModal from "../components/modals/vendor-details-modal";
 
 const Vendor = () => {
   const storedVendors = useSelector(selectVendor);
   const [vendor, setVendor] = useState(storedVendors);
   const [loading, setLoading] = useState(true);
-  // const [selectedVendor, setSelectedVendor] = useState(undefined);
+  const [selectedVendor, setSelectedVendor] = useState(undefined);
 
   // const getVendors = async () => {
   //   setLoading(true);
@@ -82,10 +84,6 @@ const Vendor = () => {
                               <th>#</th>
                               <th>vendor id</th>
                               <th>Customers</th>
-                              <th>Registered</th>
-                              <th>Mail</th>
-                              <th>Phone</th>
-                              <th>Total Order</th>
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -117,11 +115,15 @@ const Vendor = () => {
                                       <i className="icofont-copy"> </i>
                                     </a>
                                     <strong>
-                                      {vendor._id.substring(0, 10)}
+                                      {vendor._id}
                                     </strong>
                                   </td>
                                   <td>
-                                    <a href="customer-detail.html">
+                                    <a href="#/"
+                                       onClick={() => setSelectedVendor(vendor)}
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#vendor-details"
+                                    >
                                       <img
                                         className="avatar rounded"
                                         src="assets/images/xs/avatar1.svg"
@@ -132,14 +134,6 @@ const Vendor = () => {
                                       </span>
                                     </a>
                                   </td>
-                                  <td>
-                                    {moment(vendor.createdAt).format(
-                                      "do MMM, YYYY"
-                                    )}
-                                  </td>
-                                  <td>{vendor.email}</td>
-                                  <td>{vendor.phoneNumber[0]}</td>
-                                  <td>18</td>
                                   {/*<td>
                                     <div className="form-check form-switch position-absolute">
                                       <input className="form-check-input" type="checkbox" id={vendor._id} onChange={handleChange} checked={vendor.isActive} />
@@ -178,6 +172,7 @@ const Vendor = () => {
           </div>
         </div>
       </div>
+      <VendorDetailsModal vendor={selectedVendor} />
     </>
   );
 };

@@ -57,6 +57,25 @@ const VendorCategoryFilter = () => {
                   </label>
                 </div>
               </li>
+
+              <li>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault2"
+                    checked={!active}
+                    onChange={handleChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault2"
+                  >
+                    In Active
+                  </label>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
